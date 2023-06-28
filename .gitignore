@@ -1,0 +1,5 @@
+# don't include built files
+bin/
+obj/
+*.make
+Makefile
