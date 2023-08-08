@@ -2,7 +2,7 @@
 #define _ROC_OBJECT_INTERFACE_HPP_
 
 #include "ECS/Roc_ECS.h"
-#include "Logger/RocLogger.hpp"
+#include "RocLogger/RocLogger.hpp"
 
 class Object
 {

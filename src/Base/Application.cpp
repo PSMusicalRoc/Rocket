@@ -1,6 +1,6 @@
 #include "Base/Application.hpp"
 #include "ECS/Roc_ECS.h"
-#include "Logger/RocLogger.hpp"
+#include "RocLogger/RocLogger.hpp"
 
 #include <iostream>
 
@@ -36,7 +36,7 @@ Application::Application(const std::string& appName, int width, int height)
 
     if (!loadedGLAD)
     {
-        LogAssert(gladLoadGL(glfwGetProcAddress))
+        LogAssert(gladLoadGL(glfwGetProcAddress));
         LogInfo("GLAD Loaded!");
     }
     else

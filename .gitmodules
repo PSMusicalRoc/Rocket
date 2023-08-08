@@ -1,0 +1,3 @@
+[submodule "vendor/RocLogger"]
+	path = vendor/RocLogger
+	url = https://github.com/PSMusicalRoc/RocLogger.git

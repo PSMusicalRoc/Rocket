@@ -2,7 +2,7 @@
 #define _ROC_LOGTRANSFORM_SYSTEM_HPP_
 
 #include "../Roc_ECS.h"
-#include "Logger/RocLogger.hpp"
+#include "RocLogger/RocLogger.hpp"
 
 class LogTransform : public System
 {
