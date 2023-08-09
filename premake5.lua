@@ -17,7 +17,7 @@ includedirs {"include"}
 
 links {"glfw"}
 
-include("vendor/RocLogger")
+include("vendor/Roc_ECS")
 
 filter "system:Windows"
     defines {"ROC_WINDOWS"}
