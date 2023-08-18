@@ -18,6 +18,7 @@ includedirs {"include"}
 links {"glfw"}
 
 include("vendor/Roc_ECS")
+include("vendor/cereal")
 
 filter "system:Windows"
     defines {"ROC_WINDOWS"}
