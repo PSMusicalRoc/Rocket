@@ -14,5 +14,10 @@
 
 #include "Components/Transform.h"
 #include "Components/Gravity.h"
+#include "Components/Sprite.h"
+
+// Systems
+
+#include "Systems/RenderSpriteSys.hpp"
 
 #endif

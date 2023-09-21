@@ -3,3 +3,6 @@ bin/
 obj/
 *.make
 Makefile
+
+# don't include .vscode
+.vscode/

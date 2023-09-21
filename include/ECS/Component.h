@@ -23,6 +23,7 @@ private:
 public:
     Component(bool null = false) {mIsNull = null;}
     bool isNull() {return mIsNull;}
+    virtual void DestroyComponent() {}
 };
 
 #endif

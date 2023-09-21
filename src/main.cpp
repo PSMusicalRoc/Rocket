@@ -1,9 +1,13 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "Logger/RocLogger.hpp"
 #include "ECS/Roc_ECS.h"
 #include <time.h>
 #include <wait.h>
 #include "Base/Application.hpp"
 #include "ECS/Systems/LogTransform.hpp"
+#include <cmath>
+
+#include <Roc_GL/Texture.hpp>
 
 #define InitSystem(sys) LogInfo("Registering " #sys "...");\
         if (!cd->RegisterSystem<sys>()) { \
@@ -75,7 +79,8 @@ public:
             glfwSwapBuffers(m_window);
 
             double timediff = glfwGetTime() - curr_time;
-            usleep((int)((1.0 / (double)m_framerate - timediff) * 1000000.0));
+            double calculation = std::max((double)(1.0 / m_framerate) - timediff, 0.0);
+            usleep((int)(calculation * 1000000.0));
 
             prev_time = curr_time;
         }

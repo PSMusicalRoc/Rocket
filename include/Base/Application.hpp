@@ -5,6 +5,20 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
+#define InitComponent(comp) LogInfo("Registering " #comp "...");\
+        if (!cd->RegisterComponent<comp>()) { \
+            LogError("Could not register " #comp "!"); \
+        }
+
+
+#define InitSystem(sys) LogInfo("Registering " #sys "...");\
+        if (!cd->RegisterSystem<sys>()) { \
+            LogError("Could not register " #sys "!");\
+        }\
+        else {\
+            cd->SetSystemSignature<sys>(sys().GetSignature());\
+        }
+
 class Application
 {
 protected:
