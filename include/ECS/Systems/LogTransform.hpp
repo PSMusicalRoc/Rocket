@@ -3,7 +3,7 @@
 
 #include "Roc_ECS.h"
 #include "RocLogger/RocLogger.hpp"
-#include "Base/CoordinateMath.hpp"
+#include "Roc_GL/CoordinateSystem.hpp"
 
 class LogTransform : public System
 {
@@ -26,9 +26,9 @@ public:
 
             std::string glstr;
             glstr += "GLCoord: [x=";
-            glstr += std::to_string(CoordConvert(t.x, 1000));
+            glstr += std::to_string(EX2GL(t.x));
             glstr += ", y=";
-            glstr += std::to_string(CoordConvert(t.y, 1000));
+            glstr += std::to_string(EY2GL(t.y));
             glstr += "]";
             LogTrace(glstr);
         }

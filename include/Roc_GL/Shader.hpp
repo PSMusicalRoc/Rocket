@@ -6,7 +6,7 @@
 
 #include <map>
 
-#include "Logger/RocLogger.hpp"
+#include "RocLogger/RocLogger.hpp"
 #include <glad/gl.h>
 #include <string>
 

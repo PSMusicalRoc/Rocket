@@ -20,8 +20,8 @@ includedirs {"include"}
 
 links {"glfw"}
 
-include("vendor/Roc_ECS")
-include("vendor/cereal")
+dofile("vendor/Roc_ECS/premake5.lua")
+-- include("vendor/cereal")
 
 filter "system:Windows"
     defines {"ROC_WINDOWS"}
@@ -60,6 +60,9 @@ removefiles{
 includedirs {"include"}
 
 links {"glfw"}
+
+dofile("vendor/Roc_ECS/premake5.lua")
+-- include("vendor/cereal")
 
 symbols "On"
 defines {"ROC_DEBUG"}

@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <ECS/Component.h>
+#include <Roc_ECS.h>
 
 #include <glad/gl.h>
 

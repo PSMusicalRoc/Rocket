@@ -1,5 +1,5 @@
 #include "Base/Application.hpp"
-#include "Roc_ECS.h"
+#include "ECS/Roc_ECS_Additions.hpp"
 #include "RocLogger/RocLogger.hpp"
 
 #include <iostream>
