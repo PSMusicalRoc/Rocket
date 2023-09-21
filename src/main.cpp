@@ -1,13 +1,14 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "Logger/RocLogger.hpp"
-#include "ECS/Roc_ECS.h"
+#include "RocLogger/RocLogger.hpp"
+#include "ECS/Roc_ECS_Additions.hpp"
 #include <time.h>
 #include <wait.h>
 #include "Base/Application.hpp"
 #include "ECS/Systems/LogTransform.hpp"
-#include <cmath>
-
 #include <Roc_GL/Texture.hpp>
+#include "cereal/details/helpers.hpp"
+#include <fstream>
+#include <cmath>
 
 #define InitSystem(sys) LogInfo("Registering " #sys "...");\
         if (!cd->RegisterSystem<sys>()) { \
@@ -56,7 +57,7 @@ public:
             curr_time = glfwGetTime();
             deltatime = curr_time - prev_time;
             //LogInfo("FrameTime: " + std::to_string(deltatime));
-            LogInfo("FPS: " + std::to_string((int)(1/deltatime)));
+            //LogInfo("FPS: " + std::to_string((int)(1/deltatime)));
             if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
             {
                 Transform& t = cd->GetComponent<Transform>(ent);

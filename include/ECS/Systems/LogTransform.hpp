@@ -1,8 +1,9 @@
 #ifndef _ROC_LOGTRANSFORM_SYSTEM_HPP_
 #define _ROC_LOGTRANSFORM_SYSTEM_HPP_
 
-#include "../Roc_ECS.h"
-#include "Logger/RocLogger.hpp"
+#include "Roc_ECS.h"
+#include "RocLogger/RocLogger.hpp"
+#include "Base/CoordinateMath.hpp"
 
 class LogTransform : public System
 {
@@ -22,6 +23,14 @@ public:
             logstr += std::to_string(t.y);
             logstr += "]";
             LogTrace(logstr);
+
+            std::string glstr;
+            glstr += "GLCoord: [x=";
+            glstr += std::to_string(CoordConvert(t.x, 1000));
+            glstr += ", y=";
+            glstr += std::to_string(CoordConvert(t.y, 1000));
+            glstr += "]";
+            LogTrace(glstr);
         }
     }
 

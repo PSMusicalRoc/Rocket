@@ -3,6 +3,10 @@ bin/
 obj/
 *.make
 Makefile
+.cache/
+compile_commands.json
+
+
 
 # don't include .vscode
 .vscode/
