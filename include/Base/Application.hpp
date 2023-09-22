@@ -22,9 +22,6 @@
 class Application
 {
 protected:
-    Application(const std::string& appName, int width, int height);
-    ~Application() { glfwDestroyWindow(m_window); }
-
     static Application* m_currApp;
 
     static bool loadedGLAD;
@@ -33,6 +30,9 @@ protected:
     std::string m_winTitle;
     
     GLFWwindow* m_window;
+
+    Application(const std::string& appName, int width, int height);
+    virtual ~Application() { glfwDestroyWindow(m_window); }
 
 public:
     Application* CreateApplication(const std::string& appName, int width, int height);

@@ -65,7 +65,7 @@ protected:
     double ratio = 0.7;
 
     int get_next_mult_2(int inval);
-    void regenerate_array(int newsize);
+    void regenerate_array();
 
 public:
     ShaderHashMap(size_t initial_size = 0);

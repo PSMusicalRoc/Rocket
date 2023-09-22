@@ -170,12 +170,12 @@ bool Shader::SetUniformVec4(const std::string& uniform, float v1, float v2, floa
 int ShaderHashMap::get_next_mult_2(int inval)
 {
     int i = 1;
-    for (i; i < inval; i *= 2) {}
+    for (; i < inval; i *= 2) {}
 
     return i * 2;
 }
 
-void ShaderHashMap::regenerate_array(int newsize)
+void ShaderHashMap::regenerate_array()
 {
     size_t oldsize = _size;
     size_t oldnumelements = _num_elements;
@@ -183,18 +183,23 @@ void ShaderHashMap::regenerate_array(int newsize)
 
     _size = get_next_mult_2(oldsize);
     _arr = new Shader*[_size];
-    for (int i = 0; i < _size; i++)
+    for (unsigned int i = 0; i < _size; i++)
     {
         _arr[i] = new Shader();
     }
     _num_elements = 0;
 
-    for (int i = 0; i < oldsize; i++)
+    for (unsigned int i = 0; i < oldsize; i++)
     {
         if ((**(temp + i)).m_program != 0)
         {
             emplace(**(temp + i));
         }
+    }
+
+    if (_num_elements != oldnumelements)
+    {
+        LogAssert(0 && "Could not copy all elements correctly!");
     }
 
     delete[] temp;
@@ -211,7 +216,7 @@ ShaderHashMap::ShaderHashMap(size_t initial_size)
         _size = 4;
     }
     _arr = new Shader*[_size];
-    for (int i = 0; i < _size; i++)
+    for (unsigned int i = 0; i < _size; i++)
     {
         _arr[i] = new Shader();
     }
@@ -219,7 +224,7 @@ ShaderHashMap::ShaderHashMap(size_t initial_size)
 
 void ShaderHashMap::DeleteHashMap()
 {
-    for (int i = 0; i < _size; i++)
+    for (unsigned int i = 0; i < _size; i++)
     {
         if (_arr[i]->m_program != 0)
         {
@@ -237,8 +242,8 @@ Shader* ShaderHashMap::at(const std::string& key)
 {
     size_t start_loc = hash(key) % _size;
     
-    int i = start_loc;
-    for (i; i < _size; i++)
+    unsigned int i = start_loc;
+    for (; i < _size; i++)
     {
         if (key == _arr[i]->_shader_name)
         {
@@ -260,7 +265,7 @@ Shader* ShaderHashMap::at(const std::string& key)
 size_t ShaderHashMap::hash(const std::string& key)
 {
     size_t sum = 0;
-    for (int i = 0; i < key.size(); i++)
+    for (unsigned int i = 0; i < key.size(); i++)
     {
         sum += pow(10, i) * (key[i]);
     }
@@ -272,11 +277,11 @@ void ShaderHashMap::emplace(const Shader& info)
 {
     if ((double)(_num_elements + 1) / (double)_size > ratio)
     {
-        regenerate_array(get_next_mult_2(_size));
+        regenerate_array();
     }
 
     size_t start_loc = hash(info._shader_name) % _size;
-    for (int i = start_loc; i < _size; i++)
+    for (unsigned int i = start_loc; i < _size; i++)
     {
         if (_arr[i]->m_program == 0)
         {
@@ -286,7 +291,7 @@ void ShaderHashMap::emplace(const Shader& info)
             return;
         }
     }
-    for (int i = 0; i < start_loc; i++)
+    for (unsigned int i = 0; i < start_loc; i++)
     {
         if (_arr[i]->m_program == 0)
         {
@@ -301,11 +306,11 @@ void ShaderHashMap::emplace(const std::string& vertshaderfile, const std::string
 {
     if ((double)(_num_elements + 1) / (double)_size > ratio)
     {
-        regenerate_array(get_next_mult_2(_size));
+        regenerate_array();
     }
 
     size_t start_loc = hash(shader_name) % _size;
-    for (int i = start_loc; i < _size; i++)
+    for (unsigned int i = start_loc; i < _size; i++)
     {
         if (_arr[i]->m_program == 0)
         {
@@ -315,7 +320,7 @@ void ShaderHashMap::emplace(const std::string& vertshaderfile, const std::string
             return;
         }
     }
-    for (int i = 0; i < start_loc; i++)
+    for (unsigned int i = 0; i < start_loc; i++)
     {
         if (_arr[i]->m_program == 0)
         {
@@ -329,7 +334,7 @@ void ShaderHashMap::emplace(const std::string& vertshaderfile, const std::string
 void ShaderHashMap::erase(const std::string& key)
 {
     size_t start_loc = hash(key) % _size;
-    for (int i = start_loc; i < _size; i++)
+    for (unsigned int i = start_loc; i < _size; i++)
     {
         if (_arr[i]->_shader_name == key)
         {
@@ -340,7 +345,7 @@ void ShaderHashMap::erase(const std::string& key)
             return;
         }
     }
-    for (int i = 0; i < start_loc; i++)
+    for (unsigned int i = 0; i < start_loc; i++)
     {
         if (_arr[i]->_shader_name == key)
         {

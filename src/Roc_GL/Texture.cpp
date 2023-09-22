@@ -12,7 +12,7 @@ std::map<std::string, TextureInfo> Textures::TextureMap;
 size_t texture_hash(const std::string& key)
 {
     size_t sum = 0;
-    for (int i = 0; i < key.size(); i++)
+    for (unsigned int i = 0; i < key.size(); i++)
     {
         sum += pow(10, i) * (key[i]);
     }
@@ -50,12 +50,12 @@ std::ostream& operator<<(std::ostream& stream, const TextureInfo& info)
 int TextureHashMap::get_next_mult_2(int inval)
 {
     int i = 1;
-    for (i; i < inval; i *= 2) {}
+    for (; i < inval; i *= 2) {}
 
     return i * 2;
 }
 
-void TextureHashMap::regenerate_array(int newsize)
+void TextureHashMap::regenerate_array()
 {
     size_t oldsize = _size;
     size_t oldnumelements = _num_elements;
@@ -65,12 +65,17 @@ void TextureHashMap::regenerate_array(int newsize)
     _arr = new TextureInfo[_size];
     _num_elements = 0;
 
-    for (int i = 0; i < oldsize; i++)
+    for (unsigned int i = 0; i < oldsize; i++)
     {
         if ((*(temp + i)).tex_id != 0)
         {
             emplace(*(temp + i));
         }
+    }
+
+    if (_num_elements != oldnumelements)
+    {
+        LogAssert(0 && "Could not copy all elements correctly!");
     }
 
     delete[] temp;
@@ -91,7 +96,7 @@ TextureHashMap::TextureHashMap(size_t initial_size)
 
 void TextureHashMap::DeleteHashMap()
 {
-    for (int i = 0; i < _size; i++)
+    for (unsigned int i = 0; i < _size; i++)
     {
         if ((*(_arr + i)).tex_id != 0)
         {
@@ -109,8 +114,8 @@ TextureInfo TextureHashMap::at(const std::string& key)
 {
     size_t start_loc = texture_hash(key) % _size;
     
-    int i = start_loc;
-    for (i; i < _size; i++)
+    unsigned int i = start_loc;
+    for (; i < _size; i++)
     {
         if (key == _arr[i].tex_key)
         {
@@ -134,11 +139,11 @@ void TextureHashMap::emplace(TextureInfo info)
 {
     if ((double)(_num_elements + 1) / (double)_size > ratio)
     {
-        regenerate_array(get_next_mult_2(_size));
+        regenerate_array();
     }
 
     size_t start_loc = texture_hash(info.tex_key) % _size;
-    for (int i = start_loc; i < _size; i++)
+    for (unsigned int i = start_loc; i < _size; i++)
     {
         if (_arr[i].tex_id == 0)
         {
@@ -147,7 +152,7 @@ void TextureHashMap::emplace(TextureInfo info)
             return;
         }
     }
-    for (int i = 0; i < start_loc; i++)
+    for (unsigned int i = 0; i < start_loc; i++)
     {
         if (_arr[i].tex_id == 0)
         {
@@ -161,7 +166,7 @@ void TextureHashMap::emplace(TextureInfo info)
 void TextureHashMap::erase(const std::string& key)
 {
     size_t start_loc = texture_hash(key) % _size;
-    for (int i = start_loc; i < _size; i++)
+    for (unsigned int i = start_loc; i < _size; i++)
     {
         if (_arr[i].tex_key == key)
         {
@@ -170,7 +175,7 @@ void TextureHashMap::erase(const std::string& key)
             return;
         }
     }
-    for (int i = 0; i < start_loc; i++)
+    for (unsigned int i = 0; i < start_loc; i++)
     {
         if (_arr[i].tex_key == key)
         {
@@ -188,7 +193,7 @@ void TextureHashMap::PrintHashMap()
     std::cout << "  Size: " << _size << std::endl;
     std::cout << "  Number of Elements: " << _num_elements << std::endl;
     std::cout << "---------------------------" << std::endl << std::endl;
-    for (int i = 0; i < _size; i++)
+    for (unsigned int i = 0; i < _size; i++)
     {
         std::cout << "Index " << i << std::endl;
         std::cout << _arr[i] << std::endl << std::endl;
@@ -243,9 +248,4 @@ TextureInfo LoadTexture(const std::string& filename, const std::string& texture_
     Textures::TextureMap.emplace(info.tex_key, info);
 
     return info;
-}
-
-void RenderTextureAsSprite(const std::string& key, double pos_x, double pox_y, double size_x, double size_y)
-{
-    
 }

@@ -23,6 +23,10 @@ links {"glfw"}
 dofile("vendor/Roc_ECS/premake5.lua")
 -- include("vendor/cereal")
 
+buildoptions {
+    "-Wall", "-Wextra"
+}
+
 filter "system:Windows"
     defines {"ROC_WINDOWS"}
 
@@ -66,6 +70,10 @@ dofile("vendor/Roc_ECS/premake5.lua")
 
 symbols "On"
 defines {"ROC_DEBUG"}
+
+buildoptions {
+    "-Wall", "-Wextra"
+}
 
 filter "system:Windows"
     defines {"ROC_WINDOWS"}

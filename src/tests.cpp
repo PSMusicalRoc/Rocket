@@ -42,7 +42,7 @@ public:
 
         double curr_time = glfwGetTime();
         double prev_time = glfwGetTime();
-        double deltatime = 0;
+        double deltatime = 0.0;
 
         TextureInfo image_test;
         LoadTexture("res/logo.png", "test_sprite");

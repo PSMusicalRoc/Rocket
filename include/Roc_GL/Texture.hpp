@@ -23,7 +23,7 @@ public:
     size_t operator()(const std::string& s) const
     {
         size_t sum = 0;
-        for (int i = 0; i < s.size(); i++)
+        for (unsigned int i = 0; i < s.size(); i++)
         {
             sum += pow(10, i) * (s[i]);
         }
@@ -58,7 +58,7 @@ protected:
     double ratio = 0.7;
 
     int get_next_mult_2(int inval);
-    void regenerate_array(int newsize);
+    void regenerate_array();
 
 public:
     TextureHashMap(size_t initial_size = 0);
@@ -86,5 +86,3 @@ std::ostream& operator<<(std::ostream&, const TextureInfo& info);
 TextureInfo LoadTexture(const std::string& filename, const std::string& texture_key);
 
 void ClearTexture(TextureInfo& info);
-
-void RenderTextureAsSprite(const std::string& key, double pos_x, double pox_y, double size_x = 0.0, double size_y = 0.0);
