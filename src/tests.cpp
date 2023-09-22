@@ -44,6 +44,33 @@ public:
         double prev_time = glfwGetTime();
         double deltatime = 0.0;
 
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                std::string new_key = "tex_" + std::to_string(i);
+                LoadTexture("res/test.jpg", new_key);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                std::cout << "Image test: \"tex_" << i << "\"" << std::endl;
+                std::cout << Textures::TextureMap.at(std::string("tex_") + std::to_string(i));
+                std::cout << std::endl;
+            }
+
+            Textures::clear();
+        }
+
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                std::string new_key = "shad_" + std::to_string(i);
+                LoadShader("res/sprite_vertshader.glsl", "res/sprite_fragshader.glsl", new_key);
+            }
+
+            Shaders::clear();
+        }
+
         TextureInfo image_test;
         LoadTexture("res/logo.png", "test_sprite");
         image_test = Textures::TextureMap.at("test_sprite");

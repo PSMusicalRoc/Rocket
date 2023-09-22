@@ -4,8 +4,6 @@
 #include <iostream>
 #include <iomanip>
 
-#include <map>
-
 #include "RocLogger/RocLogger.hpp"
 #include <glad/gl.h>
 #include <string>
@@ -39,26 +37,12 @@ public:
     bool SetUniformVec4(const std::string& uniform, float v1, float v2, float v3, float v4);
 };
 
-class Shaders
-{
-public:
-    static std::map<std::string, Shader> ShaderMap;
-    static void clear()
-    {
-        for (auto& p : ShaderMap)
-        {
-            p.second.DeleteShader();
-        }
-        ShaderMap.clear();
-    }
-};
-
 class ShaderHashMap
 {
 protected:
     typedef long unsigned int size_t;
 
-    Shader** _arr = nullptr;
+    Shader* _arr = nullptr;
     size_t _size = 0;
     size_t _num_elements = 0;
 
@@ -72,20 +56,21 @@ public:
     void DeleteHashMap();
     ~ShaderHashMap() { DeleteHashMap(); }
 
-    Shader* at(const std::string& key);
-    Shader* operator[](const std::string& key) { return at(key); }
+    Shader& at(const std::string& key);
+    Shader& operator[](const std::string& key) { return at(key); }
     size_t hash(const std::string& key);
 
     void emplace(const Shader& shader);
     void emplace(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name);
     void erase(const std::string& key);
-
-
-    // These are debug functions, do not use much
-    //void PrintHashMap();
 };
 
-//static ShaderHashMap Shaders;
+class Shaders
+{
+public:
+    static ShaderHashMap ShaderMap;
+    static void clear() { ShaderMap.DeleteHashMap(); }
+};
 
 Shader& LoadShader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name);
 

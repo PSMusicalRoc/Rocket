@@ -5,9 +5,7 @@
 
 #include "RocLogger/RocLogger.hpp"
 
-//TextureHashMap Textures;
-
-std::map<std::string, TextureInfo> Textures::TextureMap;
+TextureHashMap Textures::TextureMap;
 
 size_t texture_hash(const std::string& key)
 {
@@ -245,7 +243,7 @@ TextureInfo LoadTexture(const std::string& filename, const std::string& texture_
 
     LogInfo("Successfully created texture " + texture_key);
 
-    Textures::TextureMap.emplace(info.tex_key, info);
+    Textures::TextureMap.emplace(info);
 
-    return info;
+    return Textures::TextureMap.at(texture_key);
 }

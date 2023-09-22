@@ -13,7 +13,7 @@ public:
         {
             Sprite& s = cd->GetComponent<Sprite>(e);
             Transform& t = cd->GetComponent<Transform>(e);
-            TextureInfo info = Textures::TextureMap[s._tex_key];
+            TextureInfo info = Textures::TextureMap.at(s._tex_key);
             Shader shader = Shaders::ShaderMap[s._shader_key];
 
             s.SetOutputData(t.x, t.y);

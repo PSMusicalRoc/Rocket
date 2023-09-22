@@ -4,7 +4,7 @@
 #include <cmath>
 
 //ShaderHashMap Shaders;
-std::map<std::string, Shader> Shaders::ShaderMap;
+ShaderHashMap Shaders::ShaderMap;
 
 GLuint Shader::LoadShader(const std::string& vertshader_file, const std::string& fragshader_file)
 {
@@ -179,21 +179,21 @@ void ShaderHashMap::regenerate_array()
 {
     size_t oldsize = _size;
     size_t oldnumelements = _num_elements;
-    Shader** temp = _arr;
+    Shader* temp = _arr;
 
     _size = get_next_mult_2(oldsize);
-    _arr = new Shader*[_size];
+    _arr = new Shader[_size];
     for (unsigned int i = 0; i < _size; i++)
     {
-        _arr[i] = new Shader();
+        _arr[i] = Shader();
     }
     _num_elements = 0;
 
     for (unsigned int i = 0; i < oldsize; i++)
     {
-        if ((**(temp + i)).m_program != 0)
+        if ((*(temp + i)).m_program != 0)
         {
-            emplace(**(temp + i));
+            emplace(*(temp + i));
         }
     }
 
@@ -215,10 +215,10 @@ ShaderHashMap::ShaderHashMap(size_t initial_size)
     {
         _size = 4;
     }
-    _arr = new Shader*[_size];
+    _arr = new Shader[_size];
     for (unsigned int i = 0; i < _size; i++)
     {
-        _arr[i] = new Shader();
+        _arr[i] = Shader();
     }
 }
 
@@ -226,10 +226,9 @@ void ShaderHashMap::DeleteHashMap()
 {
     for (unsigned int i = 0; i < _size; i++)
     {
-        if (_arr[i]->m_program != 0)
+        if (_arr[i].m_program != 0)
         {
-            _arr[i]->DeleteShader();
-            delete _arr[i];
+            _arr[i].DeleteShader();
         }
     }
     _size = 0;
@@ -238,14 +237,14 @@ void ShaderHashMap::DeleteHashMap()
     _arr = nullptr;
 }
 
-Shader* ShaderHashMap::at(const std::string& key)
+Shader& ShaderHashMap::at(const std::string& key)
 {
     size_t start_loc = hash(key) % _size;
     
     unsigned int i = start_loc;
     for (; i < _size; i++)
     {
-        if (key == _arr[i]->_shader_name)
+        if (key == _arr[i]._shader_name)
         {
             return _arr[i];
         }
@@ -253,13 +252,17 @@ Shader* ShaderHashMap::at(const std::string& key)
 
     for (i = 0; i < start_loc; i++)
     {
-        if (key == _arr[i]->_shader_name)
+        if (key == _arr[i]._shader_name)
         {
             return _arr[i];
         }
     }
 
-    return nullptr;
+    // key does not exist
+    Shader t;
+    t._shader_name = key;
+    emplace(t);
+    return at(key);
 }
 
 size_t ShaderHashMap::hash(const std::string& key)
@@ -283,19 +286,19 @@ void ShaderHashMap::emplace(const Shader& info)
     size_t start_loc = hash(info._shader_name) % _size;
     for (unsigned int i = start_loc; i < _size; i++)
     {
-        if (_arr[i]->m_program == 0)
+        if (_arr[i].m_program == 0)
         {
-            _arr[i]->m_program = info.m_program;
-            _arr[i]->_shader_name = info._shader_name;
+            _arr[i].m_program = info.m_program;
+            _arr[i]._shader_name = info._shader_name;
             _num_elements++;
             return;
         }
     }
     for (unsigned int i = 0; i < start_loc; i++)
     {
-        if (_arr[i]->m_program == 0)
+        if (_arr[i].m_program == 0)
         {
-            *(_arr[i]) = info;
+            _arr[i] = info;
             _num_elements++;
             return;
         }
@@ -312,19 +315,20 @@ void ShaderHashMap::emplace(const std::string& vertshaderfile, const std::string
     size_t start_loc = hash(shader_name) % _size;
     for (unsigned int i = start_loc; i < _size; i++)
     {
-        if (_arr[i]->m_program == 0)
+        if (_arr[i].m_program == 0)
         {
-            delete _arr[i];
-            _arr[i] = new Shader(vertshaderfile, fragshaderfile, shader_name);
+            _arr[i].LoadShader(vertshaderfile, fragshaderfile);
+            _arr[i]._shader_name = shader_name;
             _num_elements++;
             return;
         }
     }
     for (unsigned int i = 0; i < start_loc; i++)
     {
-        if (_arr[i]->m_program == 0)
+        if (_arr[i].m_program == 0)
         {
-            _arr[i]->LoadShader(vertshaderfile, fragshaderfile);
+            _arr[i].LoadShader(vertshaderfile, fragshaderfile);
+            _arr[i]._shader_name = shader_name;
             _num_elements++;
             return;
         }
@@ -336,22 +340,18 @@ void ShaderHashMap::erase(const std::string& key)
     size_t start_loc = hash(key) % _size;
     for (unsigned int i = start_loc; i < _size; i++)
     {
-        if (_arr[i]->_shader_name == key)
+        if (_arr[i]._shader_name == key)
         {
-            _arr[i]->DeleteShader();
-            delete _arr[i];
-            _arr[i] = new Shader();
+            _arr[i].DeleteShader();
             _num_elements--;
             return;
         }
     }
     for (unsigned int i = 0; i < start_loc; i++)
     {
-        if (_arr[i]->_shader_name == key)
+        if (_arr[i]._shader_name == key)
         {
-            _arr[i]->DeleteShader();
-            delete _arr[i];
-            _arr[i] = new Shader();
+            _arr[i].DeleteShader();
             _num_elements--;
             return;
         }
@@ -361,6 +361,6 @@ void ShaderHashMap::erase(const std::string& key)
 Shader& LoadShader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name)
 {
     Shader shad(vertshaderfile, fragshaderfile, shader_name);
-    Shaders::ShaderMap.emplace(shader_name, shad);
+    Shaders::ShaderMap.emplace(shad);
     return Shaders::ShaderMap[shader_name];
 }

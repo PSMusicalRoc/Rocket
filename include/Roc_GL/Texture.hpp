@@ -10,9 +10,9 @@
 
 struct TextureInfo
 {
-    GLuint tex_id;
-    int width, height;
-    std::string tex_key;
+    GLuint tex_id = 0;
+    int width = 0, height = 0;
+    std::string tex_key = "";
 };
 
 void ClearTexture(TextureInfo& info);
@@ -29,20 +29,6 @@ public:
         }
 
         return sum;
-    }
-};
-
-class Textures
-{
-public:
-    static std::map<std::string, TextureInfo> TextureMap;
-    static void clear()
-    {
-        for (auto& p : TextureMap)
-        {
-            ClearTexture(p.second);
-        }
-        TextureMap.clear();
     }
 };
 
@@ -76,10 +62,12 @@ public:
     void PrintHashMap();
 };
 
-
-
-// static TextureHashMap Textures;
-// static std::map<std::string, TextureInfo> Textures;
+class Textures
+{
+public:
+    static TextureHashMap TextureMap;
+    static void clear() { TextureMap.DeleteHashMap(); }
+};
 
 std::ostream& operator<<(std::ostream&, const TextureInfo& info);
 
