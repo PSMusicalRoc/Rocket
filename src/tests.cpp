@@ -8,6 +8,8 @@
 
 #include "ECS/Roc_ECS_Additions.hpp"
 
+#include "RScene/LoadRscene.hpp"
+
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -84,11 +86,11 @@ public:
         std::cout << image_test << std::endl;
 
         Coordinator* cd = Coordinator::Get();
-        Entity test = cd->CreateEntity();
+        Entity test = cd->CreateEntity("testent1");
         cd->AddComponent<Transform>(test, Transform());
         cd->AddComponent<Sprite>(test, Sprite());
 
-        Entity other = cd->CreateEntity();
+        Entity other = cd->CreateEntity("testent2");
         cd->AddComponent<Transform>(other, Transform());
         cd->AddComponent<Sprite>(other, Sprite());
 
@@ -108,6 +110,8 @@ public:
             t.y = 50;
         }
 
+        LoadScene("res/testscene.rscene");
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -117,23 +121,6 @@ public:
             deltatime = curr_time - prev_time;
             //LogInfo("FrameTime: " + std::to_string(deltatime));
             //LogInfo("FPS: " + std::to_string((int)(1/deltatime)));
-
-            if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
-            {
-                cd->GetComponent<Transform>(other).x += speed;
-            }
-            if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
-            {
-                cd->GetComponent<Transform>(other).x -= speed;
-            }
-            if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
-            {
-                cd->GetComponent<Transform>(other).y += speed;
-            }
-            if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
-            {
-                cd->GetComponent<Transform>(other).y -= speed;
-            }
 
             glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
             glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
