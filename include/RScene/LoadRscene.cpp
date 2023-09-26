@@ -143,6 +143,9 @@ void LoadScene(const std::string& filepath)
                     }
 
                     get_word(line, begin, end, word);
+                    if (word == "}")
+                        continue;
+                    
                     if (donothing)
                     {
                         continue;
@@ -192,7 +195,15 @@ void LoadScene(const std::string& filepath)
                         s.offsetY = std::stod(oY);
                     }
                     else{
-                        LogTrace("Inside nest - " + word);
+                        try
+                        {
+                            Coordinator::Get()->AddComponentToEntityFromText(e, word);
+                        }
+                        catch(std::runtime_error e)
+                        {
+                            LogWarn(e.what());
+                        }
+                        
                     }
                 }
             }

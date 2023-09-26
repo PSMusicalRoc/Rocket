@@ -33,6 +33,14 @@ public:
         RocTests* app = new RocTests(appName, width, height);
         if (m_currApp != nullptr)
             m_currApp->FreeApplication();
+
+        Coordinator* cd = Coordinator::Get();
+        
+        LogInfo("Beginning initialization of user created components");
+        LogInfo("Ending initialization of user created components");
+
+        LogInfo("Beginning initialization of user created systems");
+        LogInfo("Ending initialzation of user created systems");
         
         Application::m_currApp = app;
         return app;

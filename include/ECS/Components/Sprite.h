@@ -11,8 +11,8 @@
 #include "Roc_GL/Texture.hpp"
 #include "Roc_GL/CoordinateSystem.hpp"
 
-struct Sprite : public Component
-{
+ROCKET_COMPONENT(Sprite,
+public:
     friend class RenderSpriteSystem;
 
     std::string _tex_key = "";
@@ -37,6 +37,6 @@ private:
             0, 0, 0.0f,     1.0f, 1.0f  // bottom right
         };
 
-};
+);
 
 #endif
