@@ -5,11 +5,12 @@
 
 // COMPONENTS
 
-#include "Components/Sprite.h"
+#include "Components/Paddle.hpp"
+#include "Components/Ball.hpp"
 
 // SYSTEMS
 
-#include "Systems/LogTransform.hpp"
-#include "Systems/RenderSpriteSys.hpp"
+#include "Systems/PaddleControlSystem.hpp"
+#include "Systems/BallSystem.hpp"
 
 #endif

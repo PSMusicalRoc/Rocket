@@ -4,19 +4,11 @@
 #include <time.h>
 #include <wait.h>
 #include "Base/Application.hpp"
-#include "ECS/Systems/LogTransform.hpp"
 #include <Roc_GL/Texture.hpp>
+#include "RScene/LoadRscene.hpp"
 //#include "cereal/details/helpers.hpp"
 #include <fstream>
 #include <cmath>
-
-#define InitSystem(sys) LogInfo("Registering " #sys "...");\
-        if (!cd->RegisterSystem<sys>()) { \
-            LogError("Could not register " #sys "!");\
-        }\
-        else {\
-            cd->SetSystemSignature<sys>(sys().GetSignature());\
-        }
 
 class RocApplication : public Application
 {
@@ -33,6 +25,18 @@ public:
         if (m_currApp != nullptr)
             m_currApp->FreeApplication();
         
+        Coordinator* cd = Coordinator::Get();
+        
+        LogInfo("Beginning initialization of user created components");
+        InitComponent(Paddle);
+        InitComponent(BallComponent);
+        LogInfo("Ending initialization of user created components");
+
+        LogInfo("Beginning initialization of user created systems");
+        InitSystem(PaddleControls);
+        InitSystem(BallSystem);
+        LogInfo("Ending initialzation of user created systems");
+        
         Application::m_currApp = app;
         return app;
     }
@@ -45,10 +49,20 @@ public:
 
         Coordinator* cd = Coordinator::Get();
 
+        LoadScene("res/pong.rscene");
+
         while (!glfwWindowShouldClose(m_window))
         {
             curr_time = glfwGetTime();
             deltatime = curr_time - prev_time;
+
+            cd->GetSystem<CollisionSystem>()->Do();
+
+            cd->GetSystem<PaddleControls>()->Do(m_window);
+
+            cd->GetSystem<BallSystem>()->Do(deltatime);
+
+            cd->GetSystem<CollisionSystem>()->Clear();
 
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);

@@ -1,0 +1,21 @@
+Texture "pongtex" "res/texture.png"
+Shader "sprite_shader" "res/sprite_vertshader.glsl" "res/sprite_fragshader.glsl"
+
+Entity "leftpong" {
+    Transform 3 40
+    Sprite "sprite_shader" "pongtex" 1 10 0 0
+    RectangleCollider 1 10 0 0
+}
+
+Entity "rightpong" {
+    Transform 156 40
+    Sprite "sprite_shader" "pongtex" 1 10 0 0
+    RectangleCollider 1 10 0 0
+}
+
+Entity "pongball" {
+    Transform 79 44
+    Sprite "sprite_shader" "pongtex" 2 2 0 0
+    RectangleCollider 2 2 0 0
+    BallComponent
+}

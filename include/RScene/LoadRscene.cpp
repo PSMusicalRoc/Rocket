@@ -6,6 +6,7 @@
  * Texture <tex_name> <tex_path>
  * Entity <name> {}
  * Shader <shader_name> <vertshader_path> <fragshader_path>
+ * RectangleCollider <widthX> <widthY> <offsetX> <offsetY>
  * 
 */
 
@@ -193,6 +194,22 @@ void LoadScene(const std::string& filepath)
                         s.height = std::stod(h);
                         s.offsetX = std::stod(oX);
                         s.offsetY = std::stod(oY);
+                    }
+                    else if (word == "RectangleCollider")
+                    {
+                        std::string w, h, x, y;
+                        get_word(line, begin, end, w);
+                        get_word(line, begin, end, h);
+                        get_word(line, begin, end, x);
+                        get_word(line, begin, end, y);
+
+                        Coordinator::Get()->AddComponent<RectangleCollider>(e, RectangleCollider());
+                        RectangleCollider& rc = Coordinator::Get()->GetComponent<RectangleCollider>(e);
+
+                        rc.width = std::stod(w);
+                        rc.height = std::stod(h);
+                        rc.offsetX = std::stod(x);
+                        rc.offsetY = std::stod(y);
                     }
                     else{
                         try
