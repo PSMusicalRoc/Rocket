@@ -104,12 +104,12 @@ public:
 
         {
             Sprite& s = cd->GetComponent<Sprite>(test);
-            s._shader_key = "sprite_shader";
-            s._tex_key = "test_sprite";
+            s.shader_key = "sprite_shader";
+            s.texture_key = "test_sprite";
 
             Sprite& s2 = cd->GetComponent<Sprite>(other);
-            s2._shader_key = "sprite_shader";
-            s2._tex_key = "test2";
+            s2.shader_key = "sprite_shader";
+            s2.texture_key = "test2";
             s2.width = 10;
             s2.height = 10;
 

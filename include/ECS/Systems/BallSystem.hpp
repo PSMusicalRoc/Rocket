@@ -44,6 +44,17 @@ public:
             }
 
             //check for collision on the top or bottom border
+            if (t.y + rc.offsetY + rc.height >= 90)
+            {
+                t.y = 90 - (rc.offsetY+ rc.height);
+                b.velocityY = -b.velocityY;
+            }
+
+            if (t.y + rc.offsetY <= 0)
+            {
+                t.y = rc.offsetY;
+                b.velocityY = -b.velocityY;
+            }
 
             t.x += b.velocityX * deltatime;
             t.y += b.velocityY * deltatime;

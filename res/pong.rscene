@@ -2,20 +2,57 @@ Texture "pongtex" "res/texture.png"
 Shader "sprite_shader" "res/sprite_vertshader.glsl" "res/sprite_fragshader.glsl"
 
 Entity "leftpong" {
-    Transform 3 40
-    Sprite "sprite_shader" "pongtex" 1 10 0 0
-    RectangleCollider 1 10 0 0
+    Transform {
+        double x = 3.0;
+        double y = 40.0;
+    }
+    Sprite {
+        string texture_key = "pongtex";
+        string shader_key = "sprite_shader";
+        double width = 1.0;
+        double height = 10.0;
+    }
+    RectangleCollider {
+        double width = 1.0;
+        double height = 10.0;
+    }
 }
 
 Entity "rightpong" {
-    Transform 156 40
-    Sprite "sprite_shader" "pongtex" 1 10 0 0
-    RectangleCollider 1 10 0 0
+    Transform {
+        double x = 156.0;
+        double y = 40.0;
+    }
+    Sprite {
+        string texture_key = "pongtex";
+        string shader_key = "sprite_shader";
+        double width = 1.0;
+        double height = 10.0;
+    }
+    RectangleCollider {
+        double width = 1.0;
+        double height = 10.0;
+    }
 }
 
 Entity "pongball" {
-    Transform 79 44
-    Sprite "sprite_shader" "pongtex" 2 2 0 0
-    RectangleCollider 2 2 0 0
-    BallComponent
+    Transform {
+        double x = 79.0;
+        double y = 44.0;
+    }
+    Sprite {
+        string texture_key = "pongtex";
+        string shader_key = "sprite_shader";
+        double width = 2.0;
+        double height = 2.0;
+    }
+    RectangleCollider {
+        double width = 2.0;
+        double height = 2.0;
+    }
+    BallComponent {
+        double velocityX = 10.0;
+        double velocityY = 0.0;
+        bool justRespawned = 1;
+    }
 }
