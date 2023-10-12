@@ -1,4 +1,5 @@
 Texture "pongtex" "res/texture.png"
+Texture "testtex" "res/test.jpg"
 Shader "sprite_shader" "res/sprite_vertshader.glsl" "res/sprite_fragshader.glsl"
 
 Entity "leftpong" {
@@ -41,7 +42,7 @@ Entity "pongball" {
         double y = 44.0;
     }
     Sprite {
-        string texture_key = "pongtex";
+        string texture_key = "testtex";
         string shader_key = "sprite_shader";
         double width = 2.0;
         double height = 2.0;
