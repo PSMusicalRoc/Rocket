@@ -1,17 +1,17 @@
-# Test scene
-# Texture <tex_name> <tex_path>
-# Entity <name> {
-#   Transform <xpos> <ypos>
-#   Sprite <shader_id> <tex_id> <width> <height> <offsetX> <offsetY>
-# }
-# Shader <shader_name> <vertshader_path> <fragshader_path>
-
 Texture "test_tex" "res/test.jpg"
 Texture "logo" "res/logo.png"
 Shader "test_shad" "res/sprite_vertshader.glsl" "res/sprite_fragshader.glsl"
 
 Entity "testent" {
-    Transform 5 5
-    Sprite "test_shad" "test_tex" 10 50 0 0
-    Paddle
+    Transform{
+        double x = 5.0;
+        double y = 5.0;
+    }
+    Sprite {
+        string shader_key = "test_shad";
+        string texture_key = "test_tex";
+        double height = 10.0;
+        double width = 50.0;
+    }
+    Paddle {}
 }
