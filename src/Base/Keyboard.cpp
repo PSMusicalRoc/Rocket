@@ -1,15 +1,45 @@
+/**
+ * @file Keyboard.cpp
+ * 
+ * @brief Implementation for @link Keyboard.hpp @endlink
+*/
+
 #include "Base/Keyboard.hpp"
 
 #include <boost/preprocessor/slot/counter.hpp>
 
+/**
+ * Macro for defining a GLFW_KEY -> RocketKey pair for a map
+ * initializer list.
+ * 
+ * @param z ???
+ * @param n The iteration count
+ * @param data The data passed into the macro (usually the
+ * whole sequence)
+*/
 #define INIT_KEY_PAIR(z, n, data) {BOOST_PP_CAT(GLFW_KEY_, BOOST_PP_SEQ_ELEM(n, data)), RocketKey::BOOST_PP_SEQ_ELEM(n, data)}\
 BOOST_PP_COMMA_IF(BOOST_PP_SUB(BOOST_PP_SUB(NUM_KEYS, 1), n))
 
+/**
+ * Macro for defining a std::string -> RocketKey pair for a map
+ * initializer list.
+ * 
+ * @param z ???
+ * @param n The iteration count
+ * @param data The data passed into the macro (usually the
+ * whole sequence)
+*/
 #define INIT_STRING_PAIR(z, n, data) {BOOST_PP_STRINGIZE(BOOST_PP_SEQ_ELEM(n, data)), RocketKey::BOOST_PP_SEQ_ELEM(n, data)}\
 BOOST_PP_COMMA_IF(BOOST_PP_SUB(BOOST_PP_SUB(NUM_KEYS, 1), n))
 
+/**
+ * Initializes all map values for GLFW_KEY -> RocketKey map
+*/
 #define INIT_KEY_MAP BOOST_PP_REPEAT(BOOST_PP_SUB(NUM_KEYS, 1), INIT_KEY_PAIR, BOOST_PP_VARIADIC_TO_SEQ(ALL_KEYS))
 
+/**
+ * Initializes all map values for std::string -> RocketKey map
+*/
 #define INIT_STRING_MAP BOOST_PP_REPEAT(BOOST_PP_SUB(NUM_KEYS, 1), INIT_STRING_PAIR, BOOST_PP_VARIADIC_TO_SEQ(ALL_KEYS))
 
 

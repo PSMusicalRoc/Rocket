@@ -1,3 +1,18 @@
+/**
+ * @file Keyboard.hpp
+ * 
+ * This file contains all keyboard definitions, including
+ * which keys can be used, and which GLFW/strings they map
+ * to.
+ * 
+ * This file also contains any and all functions relating
+ * to getting input. Most useful is RocketKeyboard::IsKeyPressed(),
+ * which can check, as its name suggest, whether a key is pressed
+ * down or not.
+ * 
+ * @author Tim Bishop
+*/
+
 #pragma once
 
 #include <GLFW/glfw3.h>
@@ -14,14 +29,14 @@
 #include <map>
 #include <bitset>
 
-#define KEY_EQ(key)
-
 enum class RocketKey {
     K_NULL = 0,
     ALL_KEYS
 };
 
 /**
+ * @class RocketKeyboard
+ * 
  * The main class to use for accessing the keyboard in any
  * part of the code. Checks whether keys are pressed or not
  * by utilizing the GLFW backend.
@@ -29,8 +44,8 @@ enum class RocketKey {
 struct RocketKeyboard {
 
     /**
-     * Very similar in scope to glfw's `glfwGetKey`, but
-     * less abstract. Checks only for `GLFW_PRESS`.
+     * Checks the key bitset for whether the selected
+     * key is pressed down.
      * 
      * @param key The RocketKey to check the status of
      * 
@@ -90,5 +105,3 @@ private:
     */
     static RocketKey ConvertToRocketKey(int glfwkey);
 };
-
-#undef KEY_EQ
