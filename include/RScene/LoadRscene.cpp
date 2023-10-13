@@ -1,3 +1,9 @@
+/**
+ * @file LoadRscene.cpp
+ * 
+ * @brief Implementation for @link LoadRscene.hpp @endlink
+*/
+
 #include "LoadRscene.hpp"
 
 #include <fstream>
@@ -9,6 +15,16 @@
 
 #include "Base/Keyboard.hpp"
 
+/**
+ * Helper function to get the next string value from the lexer. Can
+ * throw asserts, as it checks that the next string MUST be a
+ * string, and not some identifier.
+ * 
+ * @param lex A reference to the stb_c_lexer object to obtain the
+ * string from.
+ * 
+ * @return A char* to the string read in by the lexer.
+*/
 char* GetNextString(stb_lexer& lex)
 {
     LogAssert(stb_c_lexer_get_token(&lex) && "EOF Reached.");
@@ -16,6 +32,16 @@ char* GetNextString(stb_lexer& lex)
     return lex.string;
 }
 
+/**
+ * Helper function to get the next identifier from the lexer. Can
+ * throw asserts, as it checks that the next string MUST be an
+ * identifier, and not just some string.
+ * 
+ * @param lex A reference to the stb_c_lexer object to obtain the
+ * string from.
+ * 
+ * @return A char* to the identifier read in by the lexer.
+*/
 char* GetNextID(stb_lexer& lex)
 {
     LogAssert(stb_c_lexer_get_token(&lex) && "EOF Reached.");
