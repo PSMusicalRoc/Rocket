@@ -1,3 +1,9 @@
+/**
+ * @file Application.cpp
+ * 
+ * @brief Implementation for @link Application.hpp @endlink
+*/
+
 #include "Base/Application.hpp"
 #include "ECS/Roc_ECS_Additions.hpp"
 #include "RocLogger/RocLogger.hpp"
