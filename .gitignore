@@ -10,3 +10,8 @@ compile_commands.json
 
 # don't include .vscode
 .vscode/
+
+# don't include doxygen generated content
+
+html/
+latex/

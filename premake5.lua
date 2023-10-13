@@ -80,3 +80,14 @@ filter "system:Windows"
 
 filter "system:Linux"
     defines {"ROC_NIX"}
+
+
+
+
+
+filter ""
+
+project "docs"
+    kind "Makefile"
+
+    buildcommands { "doxygen dox-config " }
