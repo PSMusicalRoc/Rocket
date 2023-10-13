@@ -20,7 +20,7 @@ Entity "leftpong" {
     Paddle {
         key key_up = W;
         key key_down = S;
-        double vertical_speed = 1.0;
+        double vertical_speed = 0.7;
     }
 }
 
@@ -42,7 +42,7 @@ Entity "rightpong" {
     Paddle {
         key key_up = UP;
         key key_down = DOWN;
-        double vertical_speed = 2.0;
+        double vertical_speed = 0.7;
     }
 }
 
@@ -62,8 +62,7 @@ Entity "pongball" {
         double height = 2.0;
     }
     BallComponent {
-        double velocityX = 10.0;
-        double velocityY = 0.0;
+        double velocity = 50.0;
         bool justRespawned = 1;
     }
 }

@@ -3,9 +3,17 @@
 #include "Roc_ECS.h"
 #include "ECS/Components/Ball.hpp"
 #include "Base/Keyboard.hpp"
+#include <cmath>
 
 class BallSystem : public System
 {
+private:
+    void CalculateCenterOfCollider(RectangleCollider& rc, Transform& t, double& midX, double& midY)
+    {
+        midX = (t.x + rc.offsetX + t.x + rc.offsetX + rc.width) / 2.0;
+        midY = (t.y + rc.offsetY + t.y + rc.offsetY + rc.height) / 2.0;
+    }
+
 public:
     void Do(double deltatime)
     {
@@ -18,7 +26,7 @@ public:
 
             if (b.justRespawned)
             {
-                b.velocityX = 20.0;
+                b.velocityX = b.velocity;
                 b.justRespawned = false;
             }
 
@@ -26,7 +34,18 @@ public:
             {
                 for (Collision& c : rc.collisions)
                 {
-                    b.velocityX = -b.velocityX;
+                    double ballCX, ballCY;
+                    double entCX, entCY;
+                    Transform& ot = cd->GetComponent<Transform>(c.ent_collided);
+                    RectangleCollider& orc = cd->GetComponent<RectangleCollider>(c.ent_collided);
+
+                    CalculateCenterOfCollider(rc, t, ballCX, ballCY);
+                    CalculateCenterOfCollider(orc, ot, entCX, entCY);
+
+                    double angle = atan2(fabs(ballCY - entCY), fabs(ballCX - entCX)) * 0.5;
+
+                    b.velocityX = b.velocityX < 0 ? cos(angle) * b.velocity : cos(angle) * -b.velocity;
+                    b.velocityY = sin(angle) * b.velocity;
                 }
             }
 
