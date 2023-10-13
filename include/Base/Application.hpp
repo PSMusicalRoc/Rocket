@@ -1,7 +1,10 @@
 #ifndef _ROC_APPLICATION_GLFW_HPP_
 #define _ROC_APPLICATION_GLFW_HPP_
 
+#ifndef __gl_h_
+
 #include <glad/gl.h>
+#endif
 #include <GLFW/glfw3.h>
 #include <string>
 

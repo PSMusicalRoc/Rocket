@@ -5,7 +5,10 @@
 #include <iomanip>
 
 #include "RocLogger/RocLogger.hpp"
+#ifndef __gl_h_
+
 #include <glad/gl.h>
+#endif
 #include <string>
 
 class Shader

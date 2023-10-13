@@ -7,6 +7,8 @@
 
 #include "RocLogger/RocLogger.hpp"
 
+#include "Base/Keyboard.hpp"
+
 char* GetNextString(stb_lexer& lex)
 {
     LogAssert(stb_c_lexer_get_token(&lex) && "EOF Reached.");
@@ -171,6 +173,16 @@ void LoadScene(const std::string& filepath)
                                 std::string val = GetNextString(lex);
                                 assert(stb_c_lexer_get_token(&lex) && lex.token == ';');
                                 if (comp->_setters.find(id) != comp->_setters.end())
+                                {
+                                    comp->_setters.at(id)(val);
+                                }
+                            }
+                            else if (type == "key")
+                            {
+                                assert(stb_c_lexer_get_token(&lex));
+                                RocketKey val = RocketKeyboard::GetKeyFromStringRep(lex.string);
+                                assert(stb_c_lexer_get_token(&lex) && lex.token == ';');
+                                if (val != RocketKey::K_NULL && comp->_setters.find(id) != comp->_setters.end())
                                 {
                                     comp->_setters.at(id)(val);
                                 }

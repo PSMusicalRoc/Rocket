@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "Base/Keyboard.hpp"
+
 bool Application::loadedGLAD = false;
 Application* Application::m_currApp = nullptr;
 
@@ -35,6 +37,10 @@ Application::Application(const std::string& appName, int width, int height)
     }
 
     glfwMakeContextCurrent(m_window);
+
+    // Set Keyboard Inputs
+
+    glfwSetKeyCallback(m_window, RocketKeyboard::KeyCallback);
 
     if (!loadedGLAD)
     {

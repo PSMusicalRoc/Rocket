@@ -12,21 +12,14 @@ public:
         for (Entity e : mEntities)
         {
             Transform& t = cd->GetComponent<Transform>(e);
-            if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
+            Paddle& p = cd->GetComponent<Paddle>(e);
+            if (RocketKeyboard::IsKeyPressed(p.key_up))
             {
-                t.x += 0.5;
+                t.y += p.vertical_speed;
             }
-            if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
+            if (RocketKeyboard::IsKeyPressed(p.key_down))
             {
-                t.x -= 0.5;
-            }
-            if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
-            {
-                t.y += 0.5;
-            }
-            if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
-            {
-                t.y -= 0.5;
+                t.y -= p.vertical_speed;
             }
         }
     }
