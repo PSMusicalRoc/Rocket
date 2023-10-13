@@ -17,6 +17,11 @@ Entity "leftpong" {
         double width = 1.0;
         double height = 10.0;
     }
+    Paddle {
+        key key_up = W;
+        key key_down = S;
+        double vertical_speed = 1.0;
+    }
 }
 
 Entity "rightpong" {
@@ -33,6 +38,11 @@ Entity "rightpong" {
     RectangleCollider {
         double width = 1.0;
         double height = 10.0;
+    }
+    Paddle {
+        key key_up = UP;
+        key key_down = DOWN;
+        double vertical_speed = 2.0;
     }
 }
 

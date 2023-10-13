@@ -1,11 +1,10 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "RocLogger/RocLogger.hpp"
-#include "ECS/Roc_ECS_Additions.hpp"
+#include <RocketEngine.hpp>
 #include <time.h>
 #include <wait.h>
-#include "Base/Application.hpp"
-#include <Roc_GL/Texture.hpp>
-#include "RScene/LoadRscene.hpp"
+
+#include "ECS/Roc_ECS_Additions.hpp"
+
 //#include "cereal/details/helpers.hpp"
 #include <fstream>
 #include <cmath>

@@ -1,17 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
-
-#include "Roc_GL/Texture.hpp"
-#include "Roc_GL/Shader.hpp"
-#include "Roc_GL/CoordinateSystem.hpp"
-#include "RocLogger/RocLogger.hpp"
-#include "Base/Application.hpp"
-
+#include <RocketEngine.hpp>
 #include "ECS/Roc_ECS_Additions.hpp"
 
-#include "RScene/LoadRscene.hpp"
-
-#include <glad/gl.h>
-#include <GLFW/glfw3.h>
 #include <cassert>
 #include <string>
 #include <iostream>
