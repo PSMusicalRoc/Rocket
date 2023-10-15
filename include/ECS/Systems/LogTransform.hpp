@@ -1,13 +1,34 @@
 #ifndef _ROC_LOGTRANSFORM_SYSTEM_HPP_
 #define _ROC_LOGTRANSFORM_SYSTEM_HPP_
 
+/**
+ * @file LogTransform.hpp
+ * 
+ * This file contains a test system, LogTransform,
+ * which simply loops over every Entity with a
+ * Transform component, and logs their current
+ * position.
+ * 
+ * @author Tim Bishop
+*/
+
 #include "Roc_ECS.h"
 #include "RocLogger/RocLogger.hpp"
 #include "Roc_GL/CoordinateSystem.hpp"
 
+/**
+ * @class LogTransform
+ * 
+ * A very simple test System that outputs every
+ * Entity's current position.
+*/
 class LogTransform : public System
 {
 public:
+    /**
+     * Outputs every Entity's current position
+     * to the Log at a LogLevel of INFO.
+    */
     void Do()
     {
         Coordinator* cd = Coordinator::Get();
