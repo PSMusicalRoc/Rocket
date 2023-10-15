@@ -1,5 +1,11 @@
 #include "Roc_GL/CoordinateSystem.hpp"
 
+/**
+ * @file CoordinateSystem.cpp
+ * 
+ * @brief Implementation for @link CoordinateSystem.hpp @endlink
+*/
+
 int CoordinateSystem::screen_height = 0;
 int CoordinateSystem::screen_width = 0;
 
