@@ -1,10 +1,10 @@
 
 [submodule "vendor/Roc_ECS"]
 	path = vendor/Roc_ECS
-	url = https://github.com/PSMusicalRoc/Roc_ECS.git
+	url = https://github.com/Rocket-Game-Engine/Roc_ECS.git
 [submodule "vendor/RocLogger"]
 	path = vendor/RocLogger
-	url = https://github.com/PSMusicalRoc/RocLogger.git
+	url = https://github.com/Rocket-Game-Engine/RocLogger.git
 [submodule "vendor/cereal"]
 	path = vendor/cereal
 	url = https://github.com/USCiLab/cereal.git
