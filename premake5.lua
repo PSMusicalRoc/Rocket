@@ -55,8 +55,7 @@ files {
     "include/**.hpp",
     "include/**.cpp",
     "src/**.cpp",
-    "src/**.c",
-
+    "src/**.c"
 }
 removefiles{
     "src/main.cpp"
@@ -66,6 +65,7 @@ includedirs {"include"}
 links {"glfw"}
 
 dofile("vendor/Roc_ECS/premake5.lua")
+dofile("vendor/boost/premake5.lua")
 -- include("vendor/cereal")
 
 symbols "On"
@@ -90,4 +90,9 @@ filter ""
 project "docs"
     kind "Makefile"
 
-    buildcommands { "doxygen dox-config " }
+    buildcommands { "make -f make-docs" }
+
+project "remove-docs"
+    kind "Makefile"
+
+    buildcommands { "rm -rf html/" }
