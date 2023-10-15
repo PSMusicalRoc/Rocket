@@ -8,3 +8,7 @@
 [submodule "vendor/cereal"]
 	path = vendor/cereal
 	url = https://github.com/USCiLab/cereal.git
+[submodule "docs/Rocket-Game-Engine.github.io"]
+	path = docs/Rocket-Game-Engine.github.io
+	url = https://github.com/Rocket-Game-Engine/Rocket-Game-Engine.github.io.git
+	branch = development
