@@ -1,0 +1,25 @@
+# recursive wildcard function from stackoverflow
+rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
+FILES = $(call rwildcard,./include,*.c *.h *.cpp *.hpp) $(call rwildcard,./src,*.c *.h *.cpp *.hpp) $(call rwildcard,./vendor,*.c *.h *.cpp *.hpp)
+SUBSTFILES = 	$(patsubst ./include/glad/%,,\
+				$(patsubst ./include/KHR/%,, \
+				$(patsubst ./include/vk_video/%,, \
+				$(patsubst ./include/vk_platform.h,, \
+				$(patsubst ./include/stb%.h,, \
+				$(patsubst ./src/gl.c,,$(patsubst ./src/vulkan.c,,\
+				$(patsubst ./vendor/boost/%,,$(FILES))))\
+)))))
+OUTFILES = $(patsubst %,./docs/gen-files/%,$(SUBSTFILES))
+INCLUDES = -Iinclude -Ivendor/Roc_ECS/include -Ivendor/Roc_ECS/vendor/RocLogger/include -Ivendor
+
+all: clean $(OUTFILES)
+	@cd docs; doxygen dox-config
+
+docs/gen-files/%:
+	@mkdir -p $(@D)
+	@echo "Generating preprocessed version of $(patsubst docs/gen-files/./%,%,$@)..."
+	@docs/ExpandPreprocessor $(patsubst docs/gen-files/./%,%,$@) $@
+
+clean:
+	@rm -rf docs/gen-files

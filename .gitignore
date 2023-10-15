@@ -13,5 +13,6 @@ compile_commands.json
 
 # don't include doxygen generated content
 
-html/
-latex/
+docs/gen-files/
+docs/html/
+interim.txt
