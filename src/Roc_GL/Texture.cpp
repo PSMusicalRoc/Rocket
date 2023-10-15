@@ -1,3 +1,9 @@
+/**
+ * @file Texture.cpp
+ * 
+ * @brief Implementation for @link Texture.hpp @endlink
+*/
+
 #include "Roc_GL/Texture.hpp"
 
 #include <string.h>
