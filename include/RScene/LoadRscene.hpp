@@ -12,6 +12,9 @@
  * This is all achieved through the macros defined in
  * @link Component.h @endlink
  * 
+ * @todo Come up with a better name than RScene... Current frontrunners are
+ * "Liftoff" and "Arsene"
+ * 
  * @author Tim Bishop
 */
 

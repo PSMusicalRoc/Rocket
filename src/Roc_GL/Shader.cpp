@@ -3,7 +3,12 @@
 #include <iostream>
 #include <cmath>
 
-//ShaderHashMap Shaders;
+/**
+ * @file Shader.cpp
+ * 
+ * @brief Implementation for @link Shader.hpp
+*/
+
 ShaderHashMap Shaders::ShaderMap;
 
 GLuint Shader::LoadShader(const std::string& vertshader_file, const std::string& fragshader_file)
