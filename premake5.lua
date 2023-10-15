@@ -91,8 +91,4 @@ project "docs"
     kind "Makefile"
 
     buildcommands { "make -f make-docs" }
-
-project "remove-docs"
-    kind "Makefile"
-
-    buildcommands { "rm -rf html/" }
+    cleancommands { "make -f make-docs clean" }

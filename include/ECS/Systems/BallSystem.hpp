@@ -1,13 +1,44 @@
 #pragma once
 
+/**
+ * @file BallSystem.hpp
+ * 
+ * This header file defines the class BallSystem,
+ * the system the engine uses to move the ball, check
+ * what the ball has collided with, and update velocities,
+ * direction, and respawning.
+ * 
+ * @author Tim Bishop
+*/
+
 #include "Roc_ECS.h"
 #include "ECS/Components/Ball.hpp"
 #include "Base/Keyboard.hpp"
 #include <cmath>
 
+/**
+ * @class BallSystem
+ * 
+ * This class is the system the engine uses to
+ * move and update the ball.
+*/
 class BallSystem : public System
 {
 private:
+/**
+ * A helper function to check for where the center of
+ * a rectangle collider is. It takes the offset
+ * of the collider, as well as the transform of the
+ * target and uses those to set two references with
+ * the median x and y position of the rectangle collider.
+ * 
+ * @param rc The RectangleCollider of the entity
+ * @param t The Transform of the entity
+ * @param midX A reference to a double value that will be
+ * set with the value of the midpoint of the Collider.
+ * @param midY A reference to a double value that will be
+ * set with the value of the midpoint of the Collider.
+*/
     void CalculateCenterOfCollider(RectangleCollider& rc, Transform& t, double& midX, double& midY)
     {
         midX = (t.x + rc.offsetX + t.x + rc.offsetX + rc.width) / 2.0;
@@ -15,6 +46,25 @@ private:
     }
 
 public:
+/**
+ * This is the workhorse of the system. It should be called every
+ * frame and does the following:
+ * <ul>
+ *  <li>Checks if a given ball has just respawned. If so, sets the
+ * new velocity accordingly.</li>
+ *  <li>Checks if a given ball has collided with anything. If it has,
+ * we update the ball's velocity accordingly.</li>
+ *  <li>Check if the ball has hit a border of the screen. Left and right
+ * borders indicate a score, top and bottom borders should simply invert
+ * the Y velocity of the ball.</li>
+ *  <li>Move the ball based on the current velocity and deltatime.</li>
+ * </ul>
+ * 
+ * @brief Updates the ball's position and velocity based on collisions
+ * 
+ * @param deltatime A double representation of the time it took for the
+ * previous frame to complete.
+*/
     void Do(double deltatime)
     {
         Coordinator* cd = Coordinator::Get();
@@ -81,6 +131,7 @@ public:
         }
     }
 
+    
     Signature GetSignature() override
     {
         Signature sig;
