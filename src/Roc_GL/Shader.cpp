@@ -6,7 +6,7 @@
 /**
  * @file Shader.cpp
  * 
- * @brief Implementation for @link Shader.hpp
+ * @brief Implementation for @link Shader.hpp @endlink
 */
 
 ShaderHashMap Shaders::ShaderMap;

@@ -46,6 +46,8 @@
  * will want or need to create with Rocket. It provides a hook
  * for the user to instantiate a window, input handling, and
  * a main loop.
+ * 
+ * @note To learn more about this class, see @ref application_layout "this page here".
 */
 class Application
 {
@@ -104,8 +106,9 @@ public:
     */
     Application* CreateApplication(const std::string& appName, int width, int height);
     /**
-     * Destroys the applicaton - Call this when the application is over
-     * to avoid memory leaks!
+     * Destroys the application - Call this when the application is over
+     * to avoid memory leaks! (Only if your application was created with
+     * some form of `new Application()`!)
     */
     void FreeApplication() { delete this; }
 

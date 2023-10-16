@@ -1,0 +1,330 @@
+/*!
+@mainpage The Rocket Engine Documentation
+
+@tableofcontents
+
+@section welcome_sec Welcome!
+
+Welcome to the Rocket Game Engine! This is an engine built from scratch
+by Tim Bishop to facilitate learning and growth, as well as satiate a
+primal urge to code just about anything.
+
+The engine is built using an Entity-Component %System. For those not familiar,
+here are the general rules the Engine follows:
+<ul>
+<li>Any "thing" in the game world is an Entity</li>
+<li>Any data values a "thing" can have are a part of one or
+more @ref Component "Components"</li>
+<li>Any functionality a "thing" can have is a System, which looks
+for Entities with specific components.</li>
+</ul>
+
+For example, a basic Character could be defined like this (note, the language
+used here is the Rscene language, another part of the Rocket Engine.)
+
+```
+Entity "character" {
+    Transform {
+        double x = 5.0;
+        double y = 5.0;
+    }
+    Sprite {
+        string texture_key = "some_tex";
+        string shader_key = "some_shader";
+        double width = 5.0;
+        double height = 5.0;
+    }
+    RectangleCollider {
+        double width = 5.0;
+        double height = 5.0;
+    }
+    CharacterMovement {
+        key left = LEFT;
+        key right = RIGHT;
+        double runspeed = 15.0;
+    }
+}
+```
+
+The Entity named "character" has 4 components attached to it: A Transform, a Sprite,
+a RectangleCollider, and a CharacterMovement. Transform, Sprite, and RectangleCollider
+are all examples of Components that ship with the engine, but CharacterMovement is a
+custom created Component.
+
+These hypothetical components could be wrapped together with a System. For more information
+about Systems, check out this.
+
+@todo Add System page
+
+@section building_sec Building the Engine
+
+Building the engine is fairly simple. It requires a few prerequisites, though:
+- Git
+- Premake (version 5 is the latest at the time of writing, and the one supported
+by the engine)
+- Doxygen (for automatically creating documentation)
+- C++ compilation support (for your operating system, that could be very different)
+- Makefile support (again, varies by operating system)
+
+@subsection compiling_linux Compiling on Linux
+
+- First, clone the repository:
+```
+git clone https://github.com/Rocket-Game-Engine/Rocket.git --recursive
+```
+- Run the following to create a Makefile for the project:
+```
+premake5 gmake2
+```
+- If you're building a Debug build:
+```
+make
+```
+- If you're building a Release build:
+```
+make config=release
+```
+
+These steps should build you the Engine, the example pong clone I'm making, and the documentation.
+
+@section further_reading Further Reading
+
+First, @ref application_layout "here is documentation for how an application should be laid out."
+
+Additionally, @ref coordsystem "here is where one can learn about our Coordinate System."
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*!
+@page application_layout Your First Rocket Application
+
+@section the_application The Application Class
+
+@note Further documentation about the %Application class can be found in the class'
+documentation page @ref Application "here".
+
+Rocket uses the Application class as a hook to enter the Engine. It is, in essence,
+the "main" function of any application.
+In the following examples,
+we will be using the classname "ApplicationSubClass" as this hypothetical Rocket
+application.
+
+@subsection subclassing_application Subclassing Application
+
+The first thing most users should do is to subclass Application. 
+The base class Application has one member that is very important to consider when making
+this subclass:
+- Application::m_currApp: A static pointer to the currently running Application. This should
+be set to the app when it is created.
+
+The base constructor of Application will take care of the rest of the fields inside Application.
+
+There are a couple of ways of creating this Application subclass:
+1) Design it such that the constructor is public, and inside said constructor initialize
+Components and Systems, as well as setting `Application::m_currApp = this`.
+```
+class ApplicationSubClass : public Application
+{
+public:
+    ApplicationSubClass(const std::string& windowName, int width, int height)
+        :Application(windowName, width, height)
+    {
+        // Initialize components and systems here
+        m_currApp = this;
+    }
+};
+```
+
+2) Design it such that the constructor is private, only calling the base constructor,
+and do all the work, as well as returning a pointer to the newly created class, via a
+static member function.
+```
+class ApplicationSubClass : public Application
+{
+private:
+    ApplicationSubClass(const std::string& windowName, int width, int height)
+        :Application(windowName, width, height) {}
+
+public:
+    ApplicationSubClass* CreateApplication(const std::string& name, int width, int height)
+    {
+        ApplicationSubClass* app = new ApplicationSubClass(name, width, height);
+        if (m_currApp != nullptr)
+            m_currApp->FreeApplication();
+        // Initialize components and systems here
+
+        Application::m_currApp = app;
+        return app;
+    }
+};
+```
+
+@note Of the two options, option 2 is preferred. It has more memory safety, as you can
+choose when to delete an application via FreeApplication(). Option 1 is a fine option
+for smaller projects where only 1 Application instance will <b>ever</b> be created.
+If multiple Applications are created while using option 1, unintended behaviour will
+commence.
+
+@subsection init_comps_and_systems Initializing Components and Systems
+
+@todo Perhaps make the macros for InitComponent and InitSystem not rely on the user
+defining `cd`?
+
+During the creation of an Application, you will need to initialize all the Components
+and Systems the app will need. All the shipped Components and Systems will be loaded
+during the base class Application's constructor, but any user created ones will need
+to be loaded by the user.
+
+To aid in this, Rocket has provided two macros: InitComponent() and InitSystem().
+These do approximately what you would expect: InitComponent() takes the name of a
+component and initializes it to the engine. InitSystem() does the same, but for
+Systems. To use these macros, the user must first include the line:
+```
+Coordinator* cd = Coordinator::Get();
+```
+These two macros rely on the definition of the variable `cd`.
+
+@note To learn more about the %Coordinator, see its class page @ref Coordinator "here".
+
+@subsection main_function The Main Function
+
+Application::Main() is the only pure virtual function in the class. As such, it must
+be overridden in the subclass. Application::Main() is, as the name implies, the main
+function of the Application. Inside it should be the per-frame logic of your application.
+
+Things to consider defining inside of Main are:
+- Framerate: Framerate is not managed by the engine, and is entirely on the programmer
+to implement, maintain, and edit as they see fit.
+- Systems: During each frame, any number of systems can and should be called upon to
+add functionality to the app. Notable among these is the RenderSpriteSystem, a part of
+the main engine, and the renderer of the app.
+
+@todo Remove the need for glfw calls in the main loop, that should be abstracted to the
+engine as a system or engine call of some kind.
+
+- glfwPollEvents() and glfwSwapBuffers(m_window): These two functions are currently
+needed to process events and update the window's graphics.
+- Rscene loads: If you need to load a scene, the Main() function would be the time to do
+it.
+
+An example of a Main function could be the following:
+```
+void Main() override
+{
+    double curr_time = glfwGetTime();
+    double prev_time = glfwGetTime();
+    double deltatime = 0;
+
+    Coordinator* cd = Coordinator::Get();
+
+    LoadScene("res/scene.rscene");
+
+    while (!glfwWindowShouldClose(m_window))
+    {
+        curr_time = glfwGetTime();
+        deltatime = curr_time - prev_time;
+
+        cd->GetSystem<CollisionSystem>()->Do();
+
+        cd->GetSystem<CollisionSystem>()->Clear();
+
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        cd->GetSystem<RenderSpriteSystem>()->Do();
+
+        glfwPollEvents();
+        glfwSwapBuffers(m_window);
+
+        double timediff = glfwGetTime() - curr_time;
+        double calculation = std::max((double)(1.0 / m_framerate) - timediff, 0.0);
+        usleep((int)(calculation * 1000000.0));
+
+        prev_time = curr_time;
+    }
+}
+```
+
+@subsection the_other_main The... other main function
+
+@todo Remove the dependency on `int main()`, the user should only have to worry
+about one Main function, and it should be inside the Application they just took
+so long to make :(
+
+Finally, we come to the main function... no the other one.
+
+`int main()` still has a part to play in the engine, although a small one. It's responsible
+for initializing GLFW (the windowing backend Rocket uses) and creating and running the
+app we just made.
+
+An example of `int main()` could be the following:
+```
+int main()
+{
+    LogTrace("Welcome to Rocket!");
+    if (!glfwInit())
+    {
+        LogFatal("Could not initialize GLFW!");
+        return -1;
+    }
+
+    ApplicationSubClass* app = ApplicationSubClass::CreateApplication("test", 1920, 1080);
+    app->Main();
+    app->FreeApplication();
+    LogTrace("Rocket is done!");
+    return 0;
+}
+```
+
+@section conclusion Conclusion
+
+With that out of the way, you've made your first Application! You're well on your way
+to making a game or other project inside Rocket!
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*!
+@page coordsystem The Coordinate System
+
+The coordinate system assumes, by default, a 16:9 aspect ratio. To that end, there are 160 units
+of width and 90 units of length. If the width : height ratio is larger than 16:9, assume black
+bars are on the left and right of the screen. If the ratio is less than 16:9, assume black bars are
+on the top and bottom of the screen. In other words, screen space will always be 16:9.
+
+Remember, there are multiple coordinate systems at play here:
+
+| Coordinate %System | Origin | Left to Right | Bottom to Top |
+|-------------------|--------|---------------|---------------|
+| OpenGL|Center|-1 to 1|-1 to 1|
+| OpenGL TexCoord|Top Left|0 to 1|0 to 1|
+| Rocket Coordinate %System|Bottom Left|0 to 160|0 to 90|
+
+Pretty much anywhere in the engine, if a property asks for a coordinate and doesn't explicitly state
+what units the coordinate is in (ex. pixels, GL coordinate, etc.), the user can assume that the
+coordinate is in terms of the Rocket Coordinate %System. Should your game need it, feel free to define
+your own coordinate system that can go back and forth between it and the Rocket system.
+
+@author Tim Bishop
+*/

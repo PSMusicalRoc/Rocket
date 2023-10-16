@@ -1,36 +1,14 @@
 #pragma once
 
 /**
- * @page coordsystem The Coordinate System
- * 
- * The coordinate system assumes, by default, a 16:9 aspect ratio. To that end, there are 160 units
- * of width and 90 units of length. If the width : height ratio is larger than 16:9, assume black
- * bars are on the left and right of the screen. If the ratio is less than 16:9, assume black bars are
- * on the top and bottom of the screen. In other words, screen space will always be 16:9.
- * 
- * Remember, there are multiple coordinate systems at play here:
- * 
- * | Coordinate %System | Origin | Left to Right | Bottom to Top |
- * |-------------------|--------|---------------|---------------|
- * | OpenGL|Center|-1 to 1|-1 to 1|
- * | OpenGL TexCoord|Top Left|0 to 1|0 to 1|
- * | Rocket Coordinate %System|Bottom Left|0 to 160|0 to 90|
- * 
- * Pretty much anywhere in the engine, if a property asks for a coordinate and doesn't explicitly state
- * what units the coordinate is in (ex. pixels, GL coordinate, etc.), the user can assume that the
- * coordinate is in terms of the Rocket Coordinate %System. Should your game need it, feel free to define
- * your own coordinate system that can go back and forth between it and the Rocket system.
- * 
- * @author Tim Bishop
-*/
-
-/**
  * @file CoordinateSystem.hpp
  * 
  * This file defines a basic Coordinate system in a
  * 16:9 aspect ratio. It also details a documentation
  * page defining the Coordinate Systems used by all
  * the different parts of the engine.
+ * 
+ * @note To learn more about the Coordinate System, see @ref coordsystem "this page here".
  * 
  * @author Tim Bishop
 */
