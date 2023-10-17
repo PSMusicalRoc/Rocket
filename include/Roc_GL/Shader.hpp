@@ -9,6 +9,9 @@
  * and be loaded in at runtime through the RScene
  * language.
  * 
+ * @todo Maybe load in a default shader (currently "sprite_shader")
+ * for users that don't want/need any custom shaders.
+ *  
  * @author Tim Bishop
 */
 
