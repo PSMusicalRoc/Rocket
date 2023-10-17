@@ -15,6 +15,8 @@
  * @todo Come up with a better name than RScene... Current frontrunners are
  * "Liftoff" and "Arsene"
  * 
+ * @todo Create a custom doxygen page detailing the Rscene syntax.
+ * 
  * @author Tim Bishop
 */
 
