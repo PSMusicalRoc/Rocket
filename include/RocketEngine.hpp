@@ -1,6 +1,10 @@
 #pragma once
 
-
+/**
+ * @todo remove the RocketEngine include from any internal
+ * files
+*/
+// for user use only
 
 // Needed backends
 #ifndef __gl_h_
