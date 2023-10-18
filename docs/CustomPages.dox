@@ -9,7 +9,10 @@ Welcome to the Rocket Game Engine! This is an engine built from scratch
 by Tim Bishop to facilitate learning and growth, as well as satiate a
 primal urge to code just about anything.
 
-The engine is built using an Entity-Component %System. For those not familiar,
+The engine is built using an Entity-Component %System,
+inspired and adapted from
+[Austin Morlan's amazing ECS writeup here](https://austinmorlan.com/posts/entity_component_system/).
+For those not familiar,
 here are the general rules the Engine follows:
 <ul>
 <li>Any "thing" in the game world is an Entity</li>
