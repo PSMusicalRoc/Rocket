@@ -113,6 +113,9 @@ Additionally, @ref coordsystem "here is where one can learn about our Coordinate
 /*!
 @page application_layout Your First Rocket Application
 
+@todo Rewrite this page, now that the entrypoint for the Engine
+has been changed and unified.
+
 @section the_application The Application Class
 
 @note Further documentation about the %Application class can be found in the class'

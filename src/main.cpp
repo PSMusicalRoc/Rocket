@@ -12,33 +12,29 @@
 class RocApplication : public Application
 {
 private:
-    RocApplication(const std::string& appName, int width, int height)
-        :Application(appName, width, height) {}
-    
-    unsigned int m_framerate = 60;
+unsigned int m_framerate = 60;
 
 public:
-    static RocApplication* CreateApplication(const std::string& appName, int width, int height)
-    {
-        RocApplication* app = new RocApplication(appName, width, height);
-        if (m_currApp != nullptr)
-            m_currApp->FreeApplication();
-        
-        Coordinator* cd = Coordinator::Get();
-        
-        LogInfo("Beginning initialization of user created components");
-        InitComponent(Paddle);
-        InitComponent(BallComponent);
-        LogInfo("Ending initialization of user created components");
+    RocApplication(const std::string& appName, int width, int height)
+        :Application(appName, width, height)
+        {
+            if (m_currApp != nullptr)
+                m_currApp->FreeApplication();
+            
+            Coordinator* cd = Coordinator::Get();
+            
+            LogInfo("Beginning initialization of user created components");
+            InitComponent(Paddle);
+            InitComponent(BallComponent);
+            LogInfo("Ending initialization of user created components");
 
-        LogInfo("Beginning initialization of user created systems");
-        InitSystem(PaddleControls);
-        InitSystem(BallSystem);
-        LogInfo("Ending initialzation of user created systems");
-        
-        Application::m_currApp = app;
-        return app;
-    }
+            LogInfo("Beginning initialization of user created systems");
+            InitSystem(PaddleControls);
+            InitSystem(BallSystem);
+            LogInfo("Ending initialzation of user created systems");
+            
+            Application::m_currApp = this;
+        }
 
     void Main() override
     {
@@ -77,30 +73,12 @@ public:
 
             prev_time = curr_time;
         }
-        FreeApplication();
     }
 };
 
-
-int main()
-{
-    LogTrace("Welcome to Rocket Engine v0.0.1a!");
-
-    // Init GLFW
-
-    LogTrace("Initializing GLFW");
-    if (!glfwInit())
+namespace Rocket{
+    Application* CreateApplication(const std::string& name, int width, int height)
     {
-        LogFatal("Could not initialize GLFW!");
-        const char** ptr; glfwGetError(ptr);
-        LogError(*ptr);
-        return -1;
+        return new RocApplication(name, width, height);
     }
-    LogInfo("GLFW Initiated!");
-
-    RocApplication* app = RocApplication::CreateApplication("Test", 1920, 1080);
-    app->Main();
-    //app->FreeApplication();
-
-    LogTrace("All done!");
 }
