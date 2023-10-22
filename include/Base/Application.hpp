@@ -19,6 +19,12 @@
 #ifndef _ROC_APPLICATION_GLFW_HPP_
 #define _ROC_APPLICATION_GLFW_HPP_
 
+/**
+ * Defines the version of the Rocket Engine
+ * internally
+*/
+#define ROCKET_VERSION "dev-entrypoint"
+
 #ifndef __gl_h_
     #include <glad/gl.h>
 #endif
@@ -26,17 +32,17 @@
 #include <string>
 
 #define InitComponent(comp) LogInfo("Registering " #comp "...");\
-        if (!cd->RegisterComponent<comp>()) { \
+        if (!Coordinator::Get()->RegisterComponent<comp>()) { \
             LogError("Could not register " #comp "!"); \
         }
 
 
 #define InitSystem(sys) LogInfo("Registering " #sys "...");\
-        if (!cd->RegisterSystem<sys>()) { \
+        if (!Coordinator::Get()->RegisterSystem<sys>()) { \
             LogError("Could not register " #sys "!");\
         }\
         else {\
-            cd->SetSystemSignature<sys>(sys().GetSignature());\
+            Coordinator::Get()->SetSystemSignature<sys>(sys().GetSignature());\
         }
 
 /**
@@ -151,5 +157,9 @@ public:
     */
     virtual void Main() = 0;
 };
+
+namespace Rocket {
+    extern Application* CreateApplication(const std::string&, int, int);
+}
 
 #endif

@@ -12,28 +12,22 @@
 class RocTests : public Application
 {
 private:
-    RocTests(const std::string& appName, int width, int height)
-        :Application(appName, width, height) {}
-    
     unsigned int m_framerate = 60;
 
 public:
-    static RocTests* CreateApplication(const std::string& appName, int width, int height)
+    RocTests(const std::string& appName, int width, int height)
+        :Application(appName, width, height)
     {
-        RocTests* app = new RocTests(appName, width, height);
         if (m_currApp != nullptr)
             m_currApp->FreeApplication();
 
-        Coordinator* cd = Coordinator::Get();
-        
         LogInfo("Beginning initialization of user created components");
         LogInfo("Ending initialization of user created components");
 
         LogInfo("Beginning initialization of user created systems");
         LogInfo("Ending initialzation of user created systems");
         
-        Application::m_currApp = app;
-        return app;
+        Application::m_currApp = this;
     }
 
     void Main() override
@@ -142,22 +136,9 @@ public:
 
 };
 
-int main()
-{
-    LogTrace("Initializing GLFW");
-    if (!glfwInit())
+namespace Rocket{
+    Application* CreateApplication(const std::string& name, int width, int height)
     {
-        LogFatal("Could not initialize GLFW!");
-        const char** ptr; glfwGetError(ptr);
-        LogError(*ptr);
-        return -1;
+        return new RocTests(name, width, height);
     }
-    LogInfo("GLFW Initiated!");
-
-    RocTests *app = RocTests::CreateApplication("window", 1280, 720);
-    app->Main();
-
-    app->FreeApplication();
-
-    return 0;
 }

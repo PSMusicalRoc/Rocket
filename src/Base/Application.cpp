@@ -18,9 +18,49 @@ Application* Application::m_currApp = nullptr;
 Application::Application(const std::string& appName, int width, int height)
     :m_winTitle(appName), m_winWidth(width), m_winHeight(height)
 {
-    // Initialize components
+    m_window = glfwCreateWindow(width, height, appName.c_str(), NULL, NULL);
+    if (!m_window)
+    {
+        LogFatal("Could not create GLFW Window");
+        glfwTerminate();
+        return;
+    }
 
-    Coordinator* cd = Coordinator::Get();
+    glfwMakeContextCurrent(m_window);
+
+    // Load OpenGL
+
+    if (!loadedGLAD)
+    {
+        LogAssert(gladLoadGL(glfwGetProcAddress));
+        LogInfo("GLAD Loaded!");
+    }
+    else
+        LogInfo("GLAD already loaded!");
+
+    // Set Keyboard Inputs
+
+    glfwSetKeyCallback(m_window, RocketKeyboard::KeyCallback);   
+}
+
+int main()
+{
+    LogTrace("Welcome to Rocket Engine v0.0.1a!");
+
+    // Init GLFW
+
+    LogTrace("Initializing GLFW");
+    if (!glfwInit())
+    {
+        LogFatal("Could not initialize GLFW!");
+        const char** ptr; glfwGetError(ptr);
+        LogError(*ptr);
+        return -1;
+    }
+    LogInfo("GLFW Initiated!");
+
+    // we save gl loading for later, a window needs to
+    // be created first
 
     LogTrace("Beginning Initialization of Components");
     InitComponent(Transform);
@@ -34,25 +74,9 @@ Application::Application(const std::string& appName, int width, int height)
     InitSystem(CollisionSystem);
     LogTrace("Ending Initialization of Systems");
 
-    m_window = glfwCreateWindow(width, height, appName.c_str(), NULL, NULL);
-    if (!m_window)
-    {
-        LogFatal("Could not create GLFW Window");
-        glfwTerminate();
-        return;
-    }
+    auto app = Rocket::CreateApplication("Test", 1920, 1080);
+    app->Main();
+    app->FreeApplication();
 
-    glfwMakeContextCurrent(m_window);
-
-    // Set Keyboard Inputs
-
-    glfwSetKeyCallback(m_window, RocketKeyboard::KeyCallback);
-
-    if (!loadedGLAD)
-    {
-        LogAssert(gladLoadGL(glfwGetProcAddress));
-        LogInfo("GLAD Loaded!");
-    }
-    else
-        LogInfo("GLAD already loaded!");
+    LogTrace("All done!");
 }
