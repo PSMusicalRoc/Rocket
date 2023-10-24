@@ -1,19 +1,8 @@
 workspace "rocket"  
     configurations { "Debug", "Release" }
 
-IncludeDirs = {}
-IncludeDirs["Rocket"] = "include"
-IncludeDirs["Roc_ECS"] = "vendor/Roc_ECS/include"
-IncludeDirs["RocLogger"] = "vendor/Roc_ECS/vendor/RocLogger/include"
-IncludeDirs["all"] = {
-    "%{IncludeDirs.Rocket}",
-    "%{IncludeDirs.Roc_ECS}",
-    "%{IncludeDirs.RocLogger}"
-}
-
-Links = {}
-Links["Rocket"] = {"glfw"}
-Links["UserProject"] = {Links.Rocket, "RocketGameEngine"}
+local rocket = require("buildRocket")
+rocket.intialize("")
 
 project "RocketGameEngine"
     kind "SharedLib"
@@ -28,31 +17,28 @@ files {
     "src/**.c"
 }
 
-links {Links.Rocket}
-
-includedirs {IncludeDirs.all}
-
 dofile("vendor/Roc_ECS/premake5.lua")
 
-dofile("./includeMe.lua")
+links {rocket.Links.RocketGameEngine}
 
-filter ""
+includedirs {rocket.Includes.all}
 
-
-project "TestOfEngine"
-    kind "ConsoleApp"
-    language "C++"
-    targetdir "bin/%{cfg.buildcfg}"
-
-files {
-    -- insert your files here
+buildoptions {
+    "-Wall", "-Wextra"
 }
 
-includedirs {IncludeDirs.all}
+filter "system:Windows"
+    defines {"ROC_WINDOWS"}
 
-links {Links.UserProject}
+filter "system:Linux"
+    defines {"ROC_NIX"}
 
-dofile("includeMe.lua")
+filter "configurations:Debug"
+    defines { "ROC_DEBUG" }  
+    symbols "On" 
+
+filter "configurations:Release"
+    optimize "On"
 
 
 
