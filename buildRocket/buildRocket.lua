@@ -1,5 +1,33 @@
 local rocket = {}
 
+function rocket.populateFiles(pathtorocket)
+    local abs_pathtorocket = path.getabsolute(pathtorocket)
+    rocket.Files = {}
+    rocket.Files["Rocket"] = {
+        path.getabsolute("include/**.h", abs_pathtorocket),
+        path.getabsolute("include/**.hpp", abs_pathtorocket),
+        path.getabsolute("include/**.cpp", abs_pathtorocket),
+        path.getabsolute("src/**.c", abs_pathtorocket),
+        path.getabsolute("src/**.cpp", abs_pathtorocket)
+    }
+    rocket.Files["Roc_ECS"] = {
+        path.getabsolute("vendor/Roc_ECS/src/**.cpp", abs_pathtorocket),
+        path.getabsolute("vendor/Roc_ECS/include/**.cpp", abs_pathtorocket),
+        path.getabsolute("vendor/Roc_ECS/include/**.h", abs_pathtorocket)
+    }
+    rocket.Files["RocLogger"] = {
+        path.getabsolute(
+            "vendor/Roc_ECS/vendor/RocLogger/include/RocLogger/RocLogger.cpp",
+            abs_pathtorocket
+        )
+    }
+    rocket.Files["all"] = {
+        rocket.Files.Rocket,
+        rocket.Files.Roc_ECS,
+        rocket.Files.RocLogger
+    }
+end
+
 function rocket.populateIncludes(pathtorocket)
     local abs_pathtorocket = path.getabsolute(pathtorocket)
     rocket.Includes = {}
@@ -44,6 +72,7 @@ function rocket.populateBuildOutputs(pathtorocket)
 end
 
 function rocket.intialize(pathtorocket)
+    rocket.populateFiles(pathtorocket)
     rocket.populateIncludes(pathtorocket)
     rocket.populateLinks(pathtorocket)
     rocket.populateBuildCommands(pathtorocket)

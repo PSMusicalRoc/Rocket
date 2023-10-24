@@ -1,23 +1,15 @@
-workspace "rocket"  
-    configurations { "Debug", "Release" }
-
 local rocket = require("buildRocket")
 rocket.intialize("")
+
+workspace "rocket"
+    configurations { "Debug", "Release" }
 
 project "RocketGameEngine"
     kind "SharedLib"
     language "C++"
     targetdir "bin/%{cfg.buildcfg}"
 
-files {
-    "include/**.h",
-    "include/**.hpp",
-    "include/**.cpp",
-    "src/**.cpp",
-    "src/**.c"
-}
-
-dofile("vendor/Roc_ECS/premake5.lua")
+files {rocket.Files.all}
 
 links {rocket.Links.RocketGameEngine}
 
@@ -25,6 +17,10 @@ includedirs {rocket.Includes.all}
 
 buildoptions {
     "-Wall", "-Wextra"
+}
+
+linkoptions {
+    "-Wl,-z,undefs"
 }
 
 filter "system:Windows"
