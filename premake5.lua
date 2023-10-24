@@ -1,53 +1,23 @@
 workspace "rocket"  
     configurations { "Debug", "Release" }
 
-project "app"  
-    kind "ConsoleApp"   
-    language "C++"   
-
-targetdir "bin/%{cfg.buildcfg}" 
-files {
-    "include/**.h",
-    "include/**.hpp",
-    "include/**.cpp",
-    "src/**.cpp",
-    "src/**.c"
-}
-removefiles {
-    "src/tests.cpp"
-}
-includedirs {"include"}
-
-links {"glfw"}
-
-dofile("vendor/Roc_ECS/premake5.lua")
--- include("vendor/cereal")
-
-buildoptions {
-    "-Wall", "-Wextra"
+IncludeDirs = {}
+IncludeDirs["Rocket"] = "include"
+IncludeDirs["Roc_ECS"] = "vendor/Roc_ECS/include"
+IncludeDirs["RocLogger"] = "vendor/Roc_ECS/vendor/RocLogger/include"
+IncludeDirs["all"] = {
+    "%{IncludeDirs.Rocket}",
+    "%{IncludeDirs.Roc_ECS}",
+    "%{IncludeDirs.RocLogger}"
 }
 
-filter "system:Windows"
-    defines {"ROC_WINDOWS"}
+Links = {}
+Links["Rocket"] = {"glfw"}
+Links["UserProject"] = {Links.Rocket, "RocketGameEngine"}
 
-filter "system:Linux"
-    defines {"ROC_NIX"}
-
-filter "configurations:Debug"
-    defines { "ROC_DEBUG" }  
-    symbols "On" 
-
-filter "configurations:Release"     optimize "On"
-
-
-
-
-filter ""
-
-project "tests"
-    kind "ConsoleApp"
+project "RocketGameEngine"
+    kind "SharedLib"
     language "C++"
-
     targetdir "bin/%{cfg.buildcfg}"
 
 files {
@@ -57,31 +27,32 @@ files {
     "src/**.cpp",
     "src/**.c"
 }
-removefiles{
-    "src/main.cpp"
-}
-includedirs {"include"}
 
-links {"glfw"}
+links {Links.Rocket}
+
+includedirs {IncludeDirs.all}
 
 dofile("vendor/Roc_ECS/premake5.lua")
-dofile("vendor/boost/premake5.lua")
--- include("vendor/cereal")
 
-symbols "On"
-defines {"ROC_DEBUG"}
+dofile("./includeMe.lua")
 
-buildoptions {
-    "-Wall", "-Wextra"
+filter ""
+
+
+project "TestOfEngine"
+    kind "ConsoleApp"
+    language "C++"
+    targetdir "bin/%{cfg.buildcfg}"
+
+files {
+    -- insert your files here
 }
 
-filter "system:Windows"
-    defines {"ROC_WINDOWS"}
+includedirs {IncludeDirs.all}
 
-filter "system:Linux"
-    defines {"ROC_NIX"}
+links {Links.UserProject}
 
-
+dofile("includeMe.lua")
 
 
 

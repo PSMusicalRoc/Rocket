@@ -5,7 +5,6 @@
 */
 
 #include "Base/Application.hpp"
-#include "ECS/Roc_ECS_Additions.hpp"
 #include "RocLogger/RocLogger.hpp"
 
 #include <iostream>

@@ -30,6 +30,7 @@
 #endif
 #include <GLFW/glfw3.h>
 #include <string>
+#include "Roc_ECS.h"
 
 #define InitComponent(comp) LogInfo("Registering " #comp "...");\
         if (!Coordinator::Get()->RegisterComponent<comp>()) { \
