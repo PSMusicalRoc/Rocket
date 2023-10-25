@@ -12,3 +12,6 @@
 	path = docs/Rocket-Game-Engine.github.io
 	url = https://github.com/Rocket-Game-Engine/Rocket-Game-Engine.github.io.git
 	branch = development
+[submodule "vendor/freetype"]
+	path = vendor/freetype
+	url = https://gitlab.freedesktop.org/freetype/freetype.git

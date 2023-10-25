@@ -34,10 +34,13 @@ function rocket.populateIncludes(pathtorocket)
     rocket.Includes["Rocket"] = path.getabsolute("include", abs_pathtorocket)
     rocket.Includes["Roc_ECS"] = path.getabsolute("vendor/Roc_ECS/include", abs_pathtorocket)
     rocket.Includes["RocLogger"] = path.getabsolute("vendor/Roc_ECS/vendor/RocLogger/include", abs_pathtorocket)
+    rocket.Includes["Boost"] = path.getabsolute("vendor", abs_pathtorocket)
+    rocket.Includes["Freetype"] = path.getabsolute("vendor/freetype", abs_pathtorocket)
     rocket.Includes["all"] = {
         rocket.Includes.Rocket,
         rocket.Includes.Roc_ECS,
-        rocket.Includes.RocLogger
+        rocket.Includes.RocLogger,
+        rocket.Includes.Boost
     }
 end
 
