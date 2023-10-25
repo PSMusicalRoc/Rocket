@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "Base/Keyboard.hpp"
+#include "Roc_GL/FontManager.hpp"
 
 bool Application::loadedGLAD = false;
 Application* Application::m_currApp = nullptr;
@@ -57,6 +58,14 @@ int main()
         return -1;
     }
     LogInfo("GLFW Initiated!");
+
+    LogTrace("Initializing FreeType");
+    if (!FontManager::Get()->InitFreeType())
+    {
+        LogFatal("Could not initialize FreeType!");
+        return -1;
+    }
+    LogTrace("FreeType Initialized!");
 
     // we save gl loading for later, a window needs to
     // be created first
