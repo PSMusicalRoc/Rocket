@@ -16,7 +16,8 @@ links {rocket.Links.RocketGameEngine}
 includedirs {rocket.Includes.all}
 
 buildoptions {
-    "-Wall", "-Wextra"
+    "-Wall", "-Wextra",
+    "`pkg-config --cflags freetype2`"
 }
 
 linkoptions {

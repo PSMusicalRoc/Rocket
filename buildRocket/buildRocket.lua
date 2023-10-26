@@ -38,7 +38,6 @@ function rocket.populateIncludes(pathtorocket)
     rocket.Includes["Roc_ECS"] = path.getabsolute("vendor/Roc_ECS/include", abs_pathtorocket)
     rocket.Includes["RocLogger"] = path.getabsolute("vendor/Roc_ECS/vendor/RocLogger/include", abs_pathtorocket)
     rocket.Includes["Boost"] = path.getabsolute("vendor", abs_pathtorocket)
-    rocket.Includes["Freetype"] = path.getabsolute("vendor/freetype/include", abs_pathtorocket)
     rocket.Includes["all"] = {
         rocket.Includes.Rocket,
         rocket.Includes.Roc_ECS,
@@ -51,7 +50,7 @@ end
 function rocket.populateLinks(pathtorocket)
     local abs_pathtorocket = path.getabsolute(pathtorocket)
     rocket.Links = {}
-    rocket.Links["RocketGameEngine"] = "glfw"
+    rocket.Links["RocketGameEngine"] = {"glfw", "freetype"}
     rocket.Links["UserProject"] = {
         rocket.Links.RocketGameEngine,
         "RocketGameEngine"

@@ -35,7 +35,10 @@ public:
     static void DestroyFontManager()
     {
         if (fm != nullptr)
+        {
+            
             delete fm;
+        }
         fm = nullptr;
     }
 
@@ -61,4 +64,6 @@ public:
     FT_Face LoadFontFromFile(const std::string filepath, const std::string font_name) { return NULL; }
 
     FT_Face LoadFontFromMemory(const unsigned char* font, unsigned int font_len, const std::string& font_name);
+
+    FT_Face GetLoadedFont(const std::string& name) { return LoadedFonts.at(name); }
 };
