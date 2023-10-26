@@ -86,5 +86,7 @@ int main()
     app->Main();
     app->FreeApplication();
 
+    FontManager::DestroyFontManager();
+
     LogTrace("All done!");
 }

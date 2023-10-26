@@ -6,6 +6,31 @@
 #include <string>
 #include <map>
 
+#include "RocLogger/RocLogger.hpp"
+
+#ifndef __gl_h_
+#include <glad/gl.h>
+#endif
+
+struct Character
+{
+    unsigned int    TextureID;
+    unsigned int    size_x_pixels;
+    unsigned int    size_y_pixels;
+    int             bearing_x_pixels;
+    int             bearing_y_pixels;
+    unsigned int    advance_pixels;
+
+    ~Character()
+    {
+        if (TextureID)
+        {
+            glDeleteTextures(1, &TextureID);
+            LogTrace("Deleted Glyph Texture");
+        }
+    }
+};
+
 class FontManager
 {
 private:
@@ -36,7 +61,7 @@ public:
     {
         if (fm != nullptr)
         {
-            
+            FT_Done_FreeType(fm->library);
             delete fm;
         }
         fm = nullptr;
@@ -65,5 +90,20 @@ public:
 
     FT_Face LoadFontFromMemory(const unsigned char* font, unsigned int font_len, const std::string& font_name);
 
-    FT_Face GetLoadedFont(const std::string& name) { return LoadedFonts.at(name); }
+    bool DeleteFont(const std::string& font_name);
+
+    /**
+     * Loads a character from a font as a texture so that it can
+     * be used to render text. Ensure that a size has been set
+     * before using this function.
+     * 
+     * @param c The character to render to a texture
+     * @param font_name The font to use to render the glyph
+     * @param char_object The character object to store details
+     * about the text into.
+     * 
+     * @returns True if loading was successful, false if
+     * there was any error.
+    */
+    bool LoadGlyph(char c, const std::string& font_name, Character& char_object);
 };
