@@ -39,8 +39,21 @@ private:
     std::map<std::string, FT_Face> LoadedFonts;
     static FontManager* fm;
     static unsigned int face_index;
+    unsigned int VBO;
+    unsigned int VAO;
 
-    FontManager() {}
+    FontManager()
+    {
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(double) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
 
 public:
 
@@ -62,6 +75,9 @@ public:
     {
         if (fm != nullptr)
         {
+            if (fm->VBO)
+                glDeleteBuffers(1, &fm->VBO);
+            
             FT_Done_FreeType(fm->library);
             delete fm;
         }
@@ -108,5 +124,5 @@ public:
     */
     bool LoadGlyph(char c, const std::string& font_name, Character& char_object, int pixelsize);
 
-    void RenderCharacter(Character& character, double& engine_x, double& engine_y);
+    void RenderCharacter(Character& character, double& engine_x, double engine_y);
 };

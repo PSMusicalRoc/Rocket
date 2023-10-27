@@ -53,6 +53,7 @@
 class Shader
 {
     friend class ShaderHashMap;
+    friend Shader LoadShaderFromMemory();
 
 protected:
     /**
@@ -81,6 +82,8 @@ protected:
      * there were errors.
     */
     GLuint LoadShader(const std::string& vertshader_file, const std::string& fragshader_file);
+
+    GLuint LoadShaderFromMemory(const std::string& vshad_source, const std::string& fshad_source);
 
     /**
      * The unique identifier of the Shader.
@@ -115,7 +118,7 @@ public:
      * @param shader_name The identifier to give the newly
      * created Shader.
     */
-    Shader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name);
+    Shader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name, bool from_memory = false);
 
 
     /**
@@ -401,5 +404,7 @@ public:
  * any errors will show.
  */
 Shader& LoadShader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name);
+
+Shader& LoadShaderFromMemory(const std::string& vertshader, const std::string& fragshader, const std::string& shader_name);
 
 #endif

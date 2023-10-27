@@ -40,7 +40,12 @@ GLuint Shader::LoadShader(const std::string& vertshader_file, const std::string&
         fshad_source += inLine + "\n";
     }
     fsh_file.close();
+    
+    return LoadShaderFromMemory(vshad_source, fshad_source);
+}
 
+GLuint Shader::LoadShaderFromMemory(const std::string& vshad_source, const std::string& fshad_source)
+{
     const char* vsh_cstr = vshad_source.c_str();
 
     GLuint vertshader = glCreateShader(GL_VERTEX_SHADER);
@@ -100,14 +105,16 @@ GLuint Shader::LoadShader(const std::string& vertshader_file, const std::string&
     return program;
 }
 
-
 Shader::Shader() :m_program(0), _shader_name("") {}
 
 
-Shader::Shader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name)
+Shader::Shader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name, bool from_memory)
     :_shader_name(shader_name)
 {
-    m_program = LoadShader(vertshaderfile, fragshaderfile);
+    if (from_memory)
+        m_program = LoadShaderFromMemory(vertshaderfile, fragshaderfile);
+    else
+        m_program = LoadShader(vertshaderfile, fragshaderfile);
 }
 
 void Shader::operator=(const Shader& shad)
@@ -366,6 +373,13 @@ void ShaderHashMap::erase(const std::string& key)
 Shader& LoadShader(const std::string& vertshaderfile, const std::string& fragshaderfile, const std::string& shader_name)
 {
     Shader shad(vertshaderfile, fragshaderfile, shader_name);
+    Shaders::ShaderMap.emplace(shad);
+    return Shaders::ShaderMap[shader_name];
+}
+
+Shader& LoadShaderFromMemory(const std::string& vertshader, const std::string& fragshader, const std::string& shader_name)
+{
+    Shader shad(vertshader, fragshader, shader_name, true);
     Shaders::ShaderMap.emplace(shad);
     return Shaders::ShaderMap[shader_name];
 }

@@ -14,14 +14,14 @@ double ConvertEngineXToGL(double x)
     return (x / (double)80) - 1.0;
 }
 
-double EX2GL(double x) { return ConvertEngineXToGL(x); }
+double E2GLX(double x) { return ConvertEngineXToGL(x); }
 
 double ConvertEngineYToGL(double y)
 {
     return (y / (double)45) - 1.0;
 }
 
-double EY2GL(double y) { return ConvertEngineYToGL(y); }
+double E2GLY(double y) { return ConvertEngineYToGL(y); }
 
 
 /* PIXELS TO/FROM OPENGL */
@@ -107,3 +107,66 @@ double PixelsToEngineY(int pixels)
 }
 
 double P2EY(int pixels) { return PixelsToEngineY(pixels); }
+
+
+int EngineToPixelsX(double coord)
+{
+    double ratio = (double)CoordinateSystem::screen_width / 
+        (double)CoordinateSystem::screen_height;
+    
+    if (ratio >= (double)16/(double)9)
+    {
+        // width is greater than the allowed 16:9 ratio
+        // calculate how much space each side of the window
+        // loses to a black bar.
+        double black_bar_size = (double)CoordinateSystem::screen_width -
+            (double)CoordinateSystem::screen_height * (double)16/(double)9;
+
+        // Set new width and position and do calculations with
+        // those values in mind
+        int screen_width = CoordinateSystem::screen_width - (int)black_bar_size;
+        int origin = (int)(black_bar_size / 2);
+
+        return origin + (int)(coord / 160.0) * screen_width;
+    }
+    else
+    {
+        // height is greater than the allowed 16:9 ratio
+        // therefore we can use the actual screen width
+
+        return (int)(coord / 160.0) * CoordinateSystem::screen_width;
+    }
+}
+
+int E2PX(double coord) { return EngineToPixelsX(coord); }
+
+int EngineToPixelsY(double coord)
+{
+    double ratio = (double)CoordinateSystem::screen_width / 
+        (double)CoordinateSystem::screen_height;
+    
+    if (ratio >= (double)16/(double)9)
+    {
+        // width is greater than the allowed 16:9 ratio
+        // therefore, we can use the window's height
+        // directly
+        return (int)(coord / 90.0) * CoordinateSystem::screen_height;
+    }
+    else
+    {
+        // height is greater than the allowed 16:9 ratio
+        // calculate how much space each side of the window
+        // loses to a black bar.
+        double black_bar_size = (double)CoordinateSystem::screen_height -
+            (double)CoordinateSystem::screen_width * (double)9/(double)16;
+
+        // Set new width and position and do calculations with
+        // those values in mind
+        int screen_height = CoordinateSystem::screen_height - (int)black_bar_size;
+        int origin = (int)(black_bar_size / 2);
+
+        return (int)(coord / 90.0) * screen_height;
+    }
+}
+
+int E2PY(double coord) { return EngineToPixelsY(coord); }

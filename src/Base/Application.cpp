@@ -13,6 +13,8 @@
 #include "Roc_GL/FontManager.hpp"
 #include "Roc_GL/CoordinateSystem.hpp"
 
+#include "Roc_GL/Shaders/TextShader.hpp"
+
 bool Application::loadedGLAD = false;
 Application* Application::m_currApp = nullptr;
 
@@ -87,6 +89,13 @@ int main()
     LogTrace("Ending Initialization of Systems");
 
     auto app = Rocket::CreateApplication("Test", 1920, 1080);
+
+    // GL should be loaded at this point, intialize internal shaders
+    LogTrace("GL Loaded, Initializing Shaders");
+    LogInfo("Loading text shader...");
+    LoadShaderFromMemory(text_shader_vert_src, text_shader_frag_src, "system-text-shader");
+    LogTrace("Done loading Shaders");
+
     app->Main();
     app->FreeApplication();
 

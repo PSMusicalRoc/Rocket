@@ -3,6 +3,8 @@
 #include <Roc_GL/Fonts/Noto-Sans.hpp>
 #include "Roc_GL/CoordinateSystem.hpp"
 
+#include "Roc_GL/Shader.hpp"
+
 
 FontManager* FontManager::fm = nullptr;
 unsigned int FontManager::face_index = 0;
@@ -104,8 +106,40 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& cha
     return true;
 }
 
-void FontManager::RenderCharacter(Character& character, double& engine_x, double& engine_y)
+void FontManager::RenderCharacter(Character& character, double& engine_x, double engine_y)
 {
     FT_Face font = LoadedFonts[character.font_key];
-    
+
+    double xpos = E2GLX(engine_x) + P2GLX(character.bearing_x_pixels);
+    double ypos = E2GLY(engine_y) - P2GLY(character.size_y_pixels - character.bearing_y_pixels);
+    double w = P2GLX(character.size_x_pixels);
+    double h = P2GLY(character.size_y_pixels);
+
+    double vertices[] = {
+        // x        y           tex_x       tex_y
+        xpos,       ypos + h,   0.0f,       0.0f ,
+        xpos,       ypos,       0.0f,       1.0f, 
+        xpos + w,   ypos,       1.0f,       1.0f,
+        xpos,       ypos + h,   0.0f,       0.0f,
+        xpos + w,   ypos,       1.0f,       1.0f,
+        xpos + w,   ypos + h,   1.0f,       0.0f  
+    };
+
+    // enable text shader
+    Shader& text_shader = Shaders::ShaderMap["system-text-shader"];
+    text_shader.Use();
+
+    glBindVertexArray(VAO);
+    glBindTexture(GL_TEXTURE_2D, character.TextureID);
+    // update content of VBO memory
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // render quad
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+    engine_x += P2EX(character.advance_pixels >> 6); // bitshift by 6 to get value in pixels (2^6 = 64)
+
+    glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

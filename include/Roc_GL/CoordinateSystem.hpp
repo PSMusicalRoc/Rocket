@@ -51,7 +51,7 @@ double ConvertEngineXToGL(double x);
  * @returns A coordinate in the OpenGL Coordinate
  * %System that is equal to the input.
 */
-double EX2GL(double x);
+double E2GLX(double x);
 
 
 /**
@@ -75,7 +75,7 @@ double ConvertEngineYToGL(double y);
  * @returns A coordinate in the OpenGL Coordinate
  * %System that is equal to the input.
 */
-double EY2GL(double y);
+double E2GLY(double y);
 
 
 /* PIXEL TO/FROM OPENGL */
@@ -132,3 +132,12 @@ double P2EX(int pixels);
 double PixelsToEngineY(int pixels);
 
 double P2EY(int pixels);
+
+
+int EngineToPixelsX(double coord);
+
+int E2PX(double coord);
+
+int EngineToPixelsY(double coord);
+
+int E2PY(double coord);
