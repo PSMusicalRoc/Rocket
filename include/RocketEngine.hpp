@@ -25,6 +25,7 @@
 
 // OpenGL Additions
 
+#include "Roc_GL/FontManager.hpp"
 #include "Roc_GL/CoordinateSystem.hpp"
 #include "Roc_GL/Shader.hpp"
 #include "Roc_GL/Texture.hpp"

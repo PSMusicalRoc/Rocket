@@ -105,5 +105,5 @@ public:
      * @returns True if loading was successful, false if
      * there was any error.
     */
-    bool LoadGlyph(char c, const std::string& font_name, Character& char_object);
+    bool LoadGlyph(char c, const std::string& font_name, Character& char_object, int pixelsize);
 };

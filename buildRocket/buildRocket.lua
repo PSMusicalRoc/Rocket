@@ -67,6 +67,18 @@ function rocket.populateBuildCommands(pathtorocket)
         string.format("premake5 --file=\"%s\" gmake2", path.getabsolute("premake5.lua", abs_pathtorocket)),
         string.format("make -C \"%s\" config=release RocketGameEngine", abs_pathtorocket)
     }
+
+    rocket.cflags = {}
+    rocket.cflags.RocketGameEngine = {
+        "`pkg-config --cflags freetype2`"
+    }
+    rocket.cflags.UserProject = {
+        "`pkg-config --cflags freetype2`"
+    }
+
+    rocket.linkflags = {}
+    rocket.linkflags.RocketGameEngine = "-Wl,-z,undefs"
+    rocket.linkflags.UserProject = ""
 end
 
 function rocket.populateBuildOutputs(pathtorocket)

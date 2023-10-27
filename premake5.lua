@@ -17,11 +17,11 @@ includedirs {rocket.Includes.all}
 
 buildoptions {
     "-Wall", "-Wextra",
-    "`pkg-config --cflags freetype2`"
+    rocket.cflags.RocketGameEngine
 }
 
 linkoptions {
-    "-Wl,-z,undefs"
+    rocket.linkflags.RocketGameEngine
 }
 
 filter "system:Windows"

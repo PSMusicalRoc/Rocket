@@ -17,7 +17,7 @@ bool FontManager::InitFreeType()
     }
 
     // Load Engine Default font (Noto Sans)
-    FT_Face defaultface = LoadFontFromMemory(Noto_Sans_Font, Noto_Sans_len * sizeof(char), "Noto Sans");
+    FT_Face defaultface = LoadFontFromMemory(Noto_Sans_Font, Noto_Sans_len, "Noto Sans");
     if (defaultface == NULL) { return false; }
 
     return true;
@@ -32,7 +32,7 @@ FT_Face FontManager::LoadFontFromMemory(const unsigned char* font, unsigned int 
         LogError(std::string("Error loading Freetype: ") + FT_Error_String(err));
         return NULL;
     }
-    newface++;
+    face_index++;
     
     LoadedFonts.emplace(font_name, newface);
     return newface;
@@ -55,7 +55,7 @@ bool FontManager::DeleteFont(const std::string& font_name)
     return LoadedFonts.erase(font_name);
 }
 
-bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& char_object)
+bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& char_object, int pixelsize)
 {
     if (LoadedFonts.find(font_name) == LoadedFonts.end())
     {
@@ -64,6 +64,7 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& cha
     }
 
     FT_Face font = LoadedFonts[font_name];
+    FT_Set_Pixel_Sizes(font, 0, pixelsize);
 
     /* Taken from https://learnopengl.com/In-Practice/Text-Rendering */
     // load character glyph 
