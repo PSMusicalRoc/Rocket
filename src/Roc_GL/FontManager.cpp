@@ -1,6 +1,7 @@
 #include "Roc_GL/FontManager.hpp"
 
 #include <Roc_GL/Fonts/Noto-Sans.hpp>
+#include "Roc_GL/CoordinateSystem.hpp"
 
 
 FontManager* FontManager::fm = nullptr;
@@ -98,6 +99,13 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& cha
     char_object.bearing_x_pixels = font->glyph->bitmap_left;
     char_object.bearing_y_pixels = font->glyph->bitmap_top;
     char_object.advance_pixels = font->glyph->advance.x;
+    char_object.font_key = font_name;
 
     return true;
+}
+
+void FontManager::RenderCharacter(Character& character, double& engine_x, double& engine_y)
+{
+    FT_Face font = LoadedFonts[character.font_key];
+    
 }

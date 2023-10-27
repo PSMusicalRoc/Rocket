@@ -11,6 +11,7 @@
 
 #include "Base/Keyboard.hpp"
 #include "Roc_GL/FontManager.hpp"
+#include "Roc_GL/CoordinateSystem.hpp"
 
 bool Application::loadedGLAD = false;
 Application* Application::m_currApp = nullptr;
@@ -27,6 +28,9 @@ Application::Application(const std::string& appName, int width, int height)
     }
 
     glfwMakeContextCurrent(m_window);
+
+    CoordinateSystem::screen_height = height;
+    CoordinateSystem::screen_width = width;
 
     // Load OpenGL
 

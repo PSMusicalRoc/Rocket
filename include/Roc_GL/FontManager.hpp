@@ -14,12 +14,13 @@
 
 struct Character
 {
-    unsigned int    TextureID;
-    unsigned int    size_x_pixels;
-    unsigned int    size_y_pixels;
-    int             bearing_x_pixels;
-    int             bearing_y_pixels;
-    unsigned int    advance_pixels;
+    unsigned int        TextureID;
+    unsigned int        size_x_pixels;
+    unsigned int        size_y_pixels;
+    int                 bearing_x_pixels;
+    int                 bearing_y_pixels;
+    unsigned int        advance_pixels;
+    std::string         font_key;
 
     ~Character()
     {
@@ -106,4 +107,6 @@ public:
      * there was any error.
     */
     bool LoadGlyph(char c, const std::string& font_name, Character& char_object, int pixelsize);
+
+    void RenderCharacter(Character& character, double& engine_x, double& engine_y);
 };

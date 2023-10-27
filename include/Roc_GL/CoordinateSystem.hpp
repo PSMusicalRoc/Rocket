@@ -16,14 +16,19 @@
 /**
  * @class CoordinateSystem
  * 
- * @todo Remove this class and its properties, they serve
- * zero function to the overall design of the engine.
+ * Holds important data values (screen width and
+ * height in pixels) so that the coordinate
+ * system functions can successfully convert between
+ * pixels, OpenGL, and Engine coordinates.
 */
 struct CoordinateSystem
 {
     static int screen_width;
     static int screen_height;
 };
+
+
+/* ENGINE TO/FROM OPENGL */
 
 /**
  * This function converts the Rocket Coordinate
@@ -71,3 +76,59 @@ double ConvertEngineYToGL(double y);
  * %System that is equal to the input.
 */
 double EY2GL(double y);
+
+
+/* PIXEL TO/FROM OPENGL */
+
+/**
+ * Converts a width in pixels to an x value in
+ * OpenGL coordinates.
+ * 
+ * @param pixels The X value to convert
+ * 
+ * @returns The OpenGL coordinate (between -1 and 1)
+*/
+double PixelsToOpenGLX(int pixels);
+
+/**
+ * Converts a width in pixels to an x value in
+ * OpenGL coordinates. (Shortcut for
+ * PixelsToOpenGLX())
+ * 
+ * @param pixels The X value to convert
+ * 
+ * @returns The OpenGL coordinate (between -1 and 1)
+*/
+double P2GLX(int pixels);
+
+/**
+ * Converts a height in pixels to a y value in
+ * OpenGL coordinates.
+ * 
+ * @param pixels The Y value to convert
+ * 
+ * @returns The OpenGL coordinate (between -1 and 1)
+*/
+double PixelsToOpenGLY(int pixels);
+
+/**
+ * Converts a height in pixels to a y value in
+ * OpenGL coordinates. (Shortcut for
+ * PixelsToOpenGLY())
+ * 
+ * @param pixels The Y value to convert
+ * 
+ * @returns The OpenGL coordinate (between -1 and 1)
+*/
+double P2GLY(int pixels);
+
+
+/* ENGINE TO/FROM PIXELS */
+
+double PixelsToEngineX(int pixels);
+
+double P2EX(int pixels);
+
+double PixelsToEngineY(int pixels);
+
+double P2EY(int pixels);
