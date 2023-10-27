@@ -13,6 +13,7 @@
 #include "RocLogger/RocLogger.hpp"
 
 #include "Base/Keyboard.hpp"
+#include "Base/Application.hpp"
 
 /**
  * Helper function to get the next string value from the lexer. Can
@@ -54,6 +55,8 @@ void LoadScene(const std::string& filepath)
 
     LogInfo("Clearing any shaders");
     Shaders::clear();
+    LogInfo("Reloading all system shaders!");
+    Rocket::LoadSystemShaders();
     LogInfo("Clearning any textures");
     Textures::clear();
     LogInfo("Clearing all entities");

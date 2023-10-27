@@ -27,7 +27,6 @@ struct Character
         if (TextureID)
         {
             glDeleteTextures(1, &TextureID);
-            LogTrace("Deleted Glyph Texture");
         }
     }
 };
@@ -48,9 +47,11 @@ private:
         glGenBuffers(1, &VBO);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(double) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(double) * 6 * 5, NULL, GL_DYNAMIC_DRAW);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), 0);
+        glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 5 * sizeof(double), 0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_DOUBLE, GL_FALSE, 5 * sizeof(double), (void*)(3 * sizeof(GLdouble)));
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
@@ -125,4 +126,6 @@ public:
     bool LoadGlyph(char c, const std::string& font_name, Character& char_object, int pixelsize);
 
     void RenderCharacter(Character& character, double& engine_x, double engine_y);
+
+    void RenderText(const std::string& text, const std::string& font_name, int pixelsize, double engine_x, double engine_y);
 };

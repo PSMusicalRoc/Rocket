@@ -18,6 +18,15 @@
 bool Application::loadedGLAD = false;
 Application* Application::m_currApp = nullptr;
 
+
+
+void Rocket::LoadSystemShaders()
+{
+    LoadShaderFromMemory(text_shader_vert_src, text_shader_frag_src, "system-text-shader");
+}
+
+
+
 Application::Application(const std::string& appName, int width, int height)
     :m_winTitle(appName), m_winWidth(width), m_winHeight(height)
 {
@@ -51,6 +60,8 @@ Application::Application(const std::string& appName, int width, int height)
 
 int main()
 {
+    Logger::EnableLogFile("logfile.log");
+
     LogTrace("Welcome to Rocket Engine " + std::string(ROCKET_VERSION_STRING));
 
     // Init GLFW
@@ -64,14 +75,6 @@ int main()
         return -1;
     }
     LogInfo("GLFW Initiated!");
-
-    LogTrace("Initializing FreeType");
-    if (!FontManager::Get()->InitFreeType())
-    {
-        LogFatal("Could not initialize FreeType!");
-        return -1;
-    }
-    LogTrace("FreeType Initialized!");
 
     // we save gl loading for later, a window needs to
     // be created first
@@ -91,9 +94,18 @@ int main()
     auto app = Rocket::CreateApplication("Test", 1920, 1080);
 
     // GL should be loaded at this point, intialize internal shaders
-    LogTrace("GL Loaded, Initializing Shaders");
+
+    LogTrace("Initializing FreeType");
+    if (!FontManager::Get()->InitFreeType())
+    {
+        LogFatal("Could not initialize FreeType!");
+        return -1;
+    }
+    LogTrace("FreeType Initialized!");
+
+    LogTrace("Initializing Shaders");
     LogInfo("Loading text shader...");
-    LoadShaderFromMemory(text_shader_vert_src, text_shader_frag_src, "system-text-shader");
+    Rocket::LoadSystemShaders();
     LogTrace("Done loading Shaders");
 
     app->Main();
@@ -102,4 +114,6 @@ int main()
     FontManager::DestroyFontManager();
 
     LogTrace("All done!");
+
+    Logger::DisableLogFile();
 }

@@ -45,7 +45,11 @@
         else {\
             Coordinator::Get()->SetSystemSignature<sys>(sys().GetSignature());\
         }
+    
 
+namespace Rocket {
+    void LoadSystemShaders();
+}
 /**
  * @class Application
  * 
