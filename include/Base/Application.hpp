@@ -23,7 +23,7 @@
  * Defines the version of the Rocket Engine
  * internally
 */
-#define ROCKET_VERSION "dev-entrypoint"
+#define ROCKET_VERSION_STRING "v0.0.1b - FontManagement"
 
 #ifndef __gl_h_
     #include <glad/gl.h>

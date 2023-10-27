@@ -45,7 +45,7 @@ Application::Application(const std::string& appName, int width, int height)
 
 int main()
 {
-    LogTrace("Welcome to Rocket Engine v0.0.1a!");
+    LogTrace("Welcome to Rocket Engine " + std::string(ROCKET_VERSION_STRING));
 
     // Init GLFW
 
