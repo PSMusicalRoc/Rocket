@@ -58,12 +58,27 @@ bool FontManager::DeleteFont(const std::string& font_name)
     return LoadedFonts.erase(font_name);
 }
 
-bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& char_object, int pixelsize)
+bool FontManager::LoadGlyph(char c, const std::string& font_name, int pixelsize)
 {
     if (LoadedFonts.find(font_name) == LoadedFonts.end())
     {
         LogWarn("Attempted to load font " + font_name + " that doesn't exist");
         return false;
+    }
+
+    if (LoadedCharacters.find(c) != LoadedCharacters.end() &&
+        LoadedCharacters.at(c).font_key == font_name &&
+        LoadedCharacters.at(c).font_size == pixelsize)
+    {
+        // we already have the character cached, use that
+        std::list<char>::const_iterator it = LastUsedCharacters.begin();
+        while (*(it) != c && it != LastUsedCharacters.end())
+            it++;
+        
+        LastUsedCharacters.erase(it);
+        LastUsedCharacters.emplace_back(c);
+
+        return true;
     }
 
     FT_Face font = LoadedFonts[font_name];
@@ -76,12 +91,39 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& cha
         LogError(std::string("Failed to load Glyph ") + c);
         return false;
     }
+
+    if (LoadedCharacters.find(c) != LoadedCharacters.end())
+    {
+        // the character exists, but is in the wrong size or
+        // wrong font
+
+        LoadedCharacters.erase(c);
+
+        std::list<char>::const_iterator it = LastUsedCharacters.begin();
+        while (*(it) != c && it != LastUsedCharacters.end())
+            it++;
+        
+        LastUsedCharacters.erase(it);
+    }
+
+    LoadedCharacters.emplace(c, Character());
+    Character& character = LoadedCharacters.at(c);
+    LastUsedCharacters.emplace_back(c);
+
+    if (LastUsedCharacters.size() > MAX_SIZE)
+    {
+        // we have too many glyphs stored in memory, delete
+        // the one used longest ago.
+        std::list<char>::const_iterator it = LastUsedCharacters.begin();
+        LoadedCharacters.erase(*it);
+        LastUsedCharacters.erase(it);
+    }
     
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     // generate texture
-    glGenTextures(1, &char_object.TextureID);
-    glBindTexture(GL_TEXTURE_2D, char_object.TextureID);
+    glGenTextures(1, &character.TextureID);
+    glBindTexture(GL_TEXTURE_2D, character.TextureID);
     glTexImage2D(
         GL_TEXTURE_2D,
         0,
@@ -99,12 +141,13 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, Character& cha
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // now store character for later use
-    char_object.size_x_pixels = font->glyph->bitmap.width;
-    char_object.size_y_pixels = font->glyph->bitmap.rows;
-    char_object.bearing_x_pixels = font->glyph->bitmap_left;
-    char_object.bearing_y_pixels = font->glyph->bitmap_top;
-    char_object.advance_pixels = font->glyph->advance.x;
-    char_object.font_key = font_name;
+    character.size_x_pixels = font->glyph->bitmap.width;
+    character.size_y_pixels = font->glyph->bitmap.rows;
+    character.bearing_x_pixels = font->glyph->bitmap_left;
+    character.bearing_y_pixels = font->glyph->bitmap_top;
+    character.advance_pixels = font->glyph->advance.x;
+    character.font_key = font_name;
+    character.font_size = pixelsize;
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
@@ -164,8 +207,14 @@ void FontManager::RenderText(const std::string& text, const std::string& font_na
     double ex_ref = engine_x;
     for (char c : text)
     {
-        Character character;
-        fm->LoadGlyph(c, font_name, character, pixelsize);
-        fm->RenderCharacter(character, ex_ref, engine_y);
+        if (fm->LoadGlyph(c, font_name, pixelsize))
+        {
+            Character& character = LoadedCharacters.at(c);
+            fm->RenderCharacter(character, ex_ref, engine_y);
+        }
+        else
+        {
+            LogWarn(std::string("Failed to load glyph ") + c + " while rendering text");
+        }
     }
 }

@@ -5,6 +5,7 @@
 
 #include <string>
 #include <map>
+#include <list>
 
 #include "RocLogger/RocLogger.hpp"
 
@@ -15,12 +16,13 @@
 struct Character
 {
     unsigned int        TextureID;
+    int                 font_size;
+    std::string         font_key;
     unsigned int        size_x_pixels;
     unsigned int        size_y_pixels;
     int                 bearing_x_pixels;
     int                 bearing_y_pixels;
     unsigned int        advance_pixels;
-    std::string         font_key;
 
     ~Character()
     {
@@ -40,6 +42,10 @@ private:
     static unsigned int face_index;
     unsigned int VBO;
     unsigned int VAO;
+
+    std::map<char, Character> LoadedCharacters;
+    std::list<char> LastUsedCharacters;
+    const int MAX_SIZE = 35;
 
     FontManager()
     {
@@ -123,7 +129,7 @@ public:
      * @returns True if loading was successful, false if
      * there was any error.
     */
-    bool LoadGlyph(char c, const std::string& font_name, Character& char_object, int pixelsize);
+    bool LoadGlyph(char c, const std::string& font_name, int pixelsize);
 
     void RenderCharacter(Character& character, double& engine_x, double engine_y);
 
