@@ -20,22 +20,22 @@ bool FontManager::InitFreeType()
     }
 
     // Load Engine Default font (Noto Sans)
-    FT_Face defaultface = LoadFontFromMemory(Noto_Sans_Font, Noto_Sans_len, "Noto Sans");
+    FT_Face* defaultface = LoadFontFromMemory(Noto_Sans_Font, Noto_Sans_len, "Noto Sans");
     if (defaultface == NULL) { return false; }
 
     return true;
 }
 
-FT_Face FontManager::LoadFontFromMemory(const unsigned char* font, unsigned int font_len, const std::string& font_name)
+FT_Face* FontManager::LoadFontFromMemory(const unsigned char* font, unsigned int font_len, const std::string& font_name)
 {
-    FT_Face newface;
-    FT_Error err = FT_New_Memory_Face(library, font, font_len, face_index, &newface);
+    FT_Face* newface = new FT_Face();
+    FT_Error err = FT_New_Memory_Face(library, font, font_len, face_index, newface);
     if (err)
     {
         LogError(std::string("Error loading Freetype: ") + FT_Error_String(err));
+        delete newface;
         return NULL;
     }
-    face_index++;
     
     LoadedFonts.emplace(font_name, newface);
     return newface;
@@ -49,12 +49,7 @@ bool FontManager::DeleteFont(const std::string& font_name)
         return false;
     }
 
-    FT_Error err = FT_Done_Face(LoadedFonts[font_name]);
-    if (err)
-    {
-        LogError("FreeType error: " + std::string(FT_Error_String(err)));
-        return false;
-    }
+    delete LoadedFonts.at(font_name);
     return LoadedFonts.erase(font_name);
 }
 
@@ -81,12 +76,12 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, int pixelsize)
         return true;
     }
 
-    FT_Face font = LoadedFonts[font_name];
-    FT_Set_Pixel_Sizes(font, 0, pixelsize);
+    FT_Face* font = LoadedFonts[font_name];
+    FT_Set_Pixel_Sizes(*font, 0, pixelsize);
 
     /* Taken from https://learnopengl.com/In-Practice/Text-Rendering */
     // load character glyph 
-    if (FT_Load_Char(font, c, FT_LOAD_RENDER))
+    if (FT_Load_Char(*font, c, FT_LOAD_RENDER))
     {
         LogError(std::string("Failed to load Glyph ") + c);
         return false;
@@ -128,12 +123,12 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, int pixelsize)
         GL_TEXTURE_2D,
         0,
         GL_RED,
-        font->glyph->bitmap.width,
-        font->glyph->bitmap.rows,
+        (*font)->glyph->bitmap.width,
+        (*font)->glyph->bitmap.rows,
         0,
         GL_RED,
         GL_UNSIGNED_BYTE,
-        font->glyph->bitmap.buffer
+        (*font)->glyph->bitmap.buffer
     );
     // set texture options
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -141,11 +136,11 @@ bool FontManager::LoadGlyph(char c, const std::string& font_name, int pixelsize)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // now store character for later use
-    character.size_x_pixels = font->glyph->bitmap.width;
-    character.size_y_pixels = font->glyph->bitmap.rows;
-    character.bearing_x_pixels = font->glyph->bitmap_left;
-    character.bearing_y_pixels = font->glyph->bitmap_top;
-    character.advance_pixels = font->glyph->advance.x;
+    character.size_x_pixels = (*font)->glyph->bitmap.width;
+    character.size_y_pixels = (*font)->glyph->bitmap.rows;
+    character.bearing_x_pixels = (*font)->glyph->bitmap_left;
+    character.bearing_y_pixels = (*font)->glyph->bitmap_top;
+    character.advance_pixels = (*font)->glyph->advance.x;
     character.font_key = font_name;
     character.font_size = pixelsize;
 
@@ -166,8 +161,6 @@ double PixelToGLSizeY(int pixels)
 
 void FontManager::RenderCharacter(Character& character, double& engine_x, double engine_y)
 {
-    FT_Face font = LoadedFonts[character.font_key];
-
     double xpos = E2GLX(engine_x) + PixelToGLSizeX(character.bearing_x_pixels);
     double ypos = E2GLY(engine_y) - PixelToGLSizeY(character.size_y_pixels - character.bearing_y_pixels);
     double w = PixelToGLSizeX(character.size_x_pixels);
