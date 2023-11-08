@@ -37,9 +37,10 @@ class FontManager
 {
 private:
     FT_Library library;
-    std::map<std::string, FT_Face> LoadedFonts;
+    std::map<std::string, FT_Face*> LoadedFonts;
     static FontManager* fm;
     static unsigned int face_index;
+
     unsigned int VBO;
     unsigned int VAO;
 
@@ -85,6 +86,12 @@ public:
             if (fm->VBO)
                 glDeleteBuffers(1, &fm->VBO);
             
+            for (auto pair : fm->LoadedFonts)
+            {
+                delete pair.second;
+            }
+            fm->LoadedFonts.clear();
+            
             FT_Done_FreeType(fm->library);
             delete fm;
         }
@@ -110,9 +117,9 @@ public:
      * 
      * @returns The loaded FT_Face, or NULL if there was an error.
     */
-    FT_Face LoadFontFromFile(const std::string filepath, const std::string font_name) { return NULL; }
+    FT_Face* LoadFontFromFile(const std::string filepath, const std::string font_name) { return NULL; }
 
-    FT_Face LoadFontFromMemory(const unsigned char* font, unsigned int font_len, const std::string& font_name);
+    FT_Face* LoadFontFromMemory(const unsigned char* font, unsigned int font_len, const std::string& font_name);
 
     bool DeleteFont(const std::string& font_name);
 
