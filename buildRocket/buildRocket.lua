@@ -70,10 +70,12 @@ function rocket.populateBuildCommands(pathtorocket)
 
     rocket.cflags = {}
     rocket.cflags.RocketGameEngine = {
-        "`pkg-config --cflags freetype2`"
+        "`pkg-config --cflags freetype2`",
+        "-DFT_CONFIG_OPTION_ERROR_STRINGS"
     }
     rocket.cflags.UserProject = {
-        "`pkg-config --cflags freetype2`"
+        "`pkg-config --cflags freetype2`",
+        "-DFT_CONFIG_OPTION_ERROR_STRINGS"
     }
 
     rocket.linkflags = {}
